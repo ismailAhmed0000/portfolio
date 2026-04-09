@@ -2,7 +2,7 @@ import { introHighlights } from "@/components/portfolio/data";
 
 export default function IntroPage() {
   return (
-    <section className="grid h-full grid-cols-[0.82fr_1.18fr] bg-[linear-gradient(180deg,rgba(241,246,241,0.95),rgba(223,234,223,0.98))]">
+    <section className="grid min-h-full grid-cols-[0.82fr_1.18fr] bg-[linear-gradient(180deg,rgba(241,246,241,0.95),rgba(223,234,223,0.98))]">
       <div className="flex flex-col justify-between border-r border-[#6b816f]/12 bg-[#e6efe6]/92 p-3 md:p-6">
         <div>
           <div className="inline-flex items-center rounded-full border border-[#6b816f]/14 bg-white/58 px-2.5 py-1 text-[0.48rem] font-semibold uppercase tracking-[0.22em] text-[#627868] md:text-[0.58rem]">

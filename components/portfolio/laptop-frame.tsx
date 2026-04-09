@@ -1,30 +1,18 @@
+"use client";
+
+import { useState } from "react";
 import { screenPages } from "@/components/portfolio/data";
 import IntroPage from "@/components/portfolio/laptop/intro-page";
 import ProjectsPage from "@/components/portfolio/laptop/projects-page";
 import StackPage from "@/components/portfolio/laptop/stack-page";
 
-type LaptopFrameProps = {
-  activeScreenPage: number;
-  laptopReveal: number;
-  laptopTransform: string;
-  screenOffset: number;
-};
+const pages = [IntroPage, StackPage, ProjectsPage];
 
-export default function LaptopFrame({
-  activeScreenPage,
-  laptopReveal,
-  laptopTransform,
-  screenOffset,
-}: LaptopFrameProps) {
+export default function LaptopFrame() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
-    <div
-      className="relative w-full max-w-5xl transform-gpu transition-transform duration-300 will-change-transform"
-      style={{
-        opacity: 0.35 + laptopReveal * 0.65,
-        transform: laptopTransform,
-        transformOrigin: "center bottom",
-      }}
-    >
+    <div className="relative w-full max-w-5xl">
       <div className="relative rounded-[2rem] bg-[linear-gradient(180deg,#1d1d1f_0%,#080809_100%)] p-[10px] shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
         <div className="absolute left-1/2 top-[7px] z-20 h-[8px] w-[8px] -translate-x-1/2 rounded-full bg-[#111] shadow-[0_0_0_1px_rgba(255,255,255,0.06)]" />
 
@@ -47,8 +35,8 @@ export default function LaptopFrame({
                   {screenPages.map((page, index) => (
                     <span
                       key={page}
-                      className={`h-2 rounded-full transition-all duration-500 ${
-                        activeScreenPage === index
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        activeIndex === index
                           ? "w-6 bg-[#496055]"
                           : "w-2 bg-[#9db2a0]"
                       }`}
@@ -57,15 +45,28 @@ export default function LaptopFrame({
                 </div>
 
                 <div
-                  className="h-full will-change-transform"
-                  style={{
-                    transform: `translateY(-${screenOffset}%)`,
-                    transition: "transform 220ms linear",
+                  className="laptop-scroll h-full snap-y snap-mandatory overflow-y-auto overscroll-contain scroll-smooth"
+                  onScroll={(event) => {
+                    const viewportHeight = event.currentTarget.clientHeight;
+
+                    if (viewportHeight === 0) {
+                      return;
+                    }
+
+                    const nextIndex = Math.round(
+                      event.currentTarget.scrollTop / viewportHeight,
+                    );
+
+                    setActiveIndex(
+                      Math.max(0, Math.min(screenPages.length - 1, nextIndex)),
+                    );
                   }}
                 >
-                  <IntroPage />
-                  <StackPage />
-                  <ProjectsPage />
+                  {pages.map((PageComponent, index) => (
+                    <div key={screenPages[index]} className="min-h-full snap-start">
+                      <PageComponent />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

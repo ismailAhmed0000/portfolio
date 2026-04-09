@@ -2,7 +2,7 @@ import { projectCards } from "@/components/portfolio/data";
 
 export default function ProjectsPage() {
   return (
-    <section className="flex h-full min-h-0 flex-col bg-[linear-gradient(180deg,rgba(243,247,243,0.95),rgba(225,235,225,0.98))] p-3 md:p-6">
+    <section className="flex min-h-full flex-col bg-[linear-gradient(180deg,rgba(243,247,243,0.95),rgba(225,235,225,0.98))] p-3 md:p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[0.56rem] font-semibold uppercase tracking-[0.24em] text-[#5d7463] md:text-[0.7rem]">

@@ -2,7 +2,7 @@ import { stackGroups } from "@/components/portfolio/data";
 
 export default function StackPage() {
   return (
-    <section className="grid h-full grid-cols-[0.8fr_1.2fr] bg-[linear-gradient(180deg,rgba(238,245,238,0.96),rgba(220,232,220,0.98))]">
+    <section className="grid min-h-full grid-cols-[0.8fr_1.2fr] bg-[linear-gradient(180deg,rgba(238,245,238,0.96),rgba(220,232,220,0.98))]">
       <div className="flex flex-col justify-between border-r border-[#6b816f]/12 bg-[#e3eee3]/92 p-3 md:p-6">
         <div>
           <p className="text-[0.56rem] font-semibold uppercase tracking-[0.24em] text-[#5d7463] md:text-[0.7rem]">
