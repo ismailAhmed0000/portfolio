@@ -2,84 +2,103 @@ import { introHighlights } from "@/components/portfolio/data";
 
 export default function IntroPage() {
   return (
-    <section className="grid min-h-full grid-cols-[0.82fr_1.18fr] bg-[linear-gradient(180deg,rgba(241,246,241,0.95),rgba(223,234,223,0.98))]">
-      <div className="flex flex-col justify-between border-r border-[#6b816f]/12 bg-[#e6efe6]/92 p-3 md:p-6">
-        <div>
-          <div className="inline-flex items-center rounded-full border border-[#6b816f]/14 bg-white/58 px-2.5 py-1 text-[0.48rem] font-semibold uppercase tracking-[0.22em] text-[#627868] md:text-[0.58rem]">
-            Full Stack Developer
+    <section className="grid min-h-full grid-cols-[0.28fr_1fr] bg-[#1e2228] text-[#edf6ef]">
+      <aside className="border-r border-white/6 bg-[#171a1f] p-4 md:p-6">
+        <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-[#7f9183] md:text-[0.84rem]">
+          Explorer
+        </p>
+
+        <div className="mt-5 space-y-3 font-mono text-[0.82rem] text-[#a7b5aa] md:text-[0.96rem]">
+          <div className="rounded-xl border border-[#7dd97d]/20 bg-[#0f1114] px-3 py-2 text-[#7dd97d]">
+            src/intro.tsx
           </div>
-
-          <h2 className="mt-3 text-[1rem] font-black uppercase leading-none tracking-[-0.08em] text-[#16211b] md:text-[2rem]">
-            Ismail
-            <br />
-            Ahmed
-          </h2>
-
-          <p className="mt-3 max-w-[18rem] text-[0.58rem] leading-4 text-[#42564a] md:text-[0.76rem] md:leading-5">
-            I build digital products end to end, bringing together frontend
-            clarity, backend structure, and product thinking that helps ideas
-            become reliable experiences.
-          </p>
+          <div className="px-3 py-2">src/stack.json</div>
+          <div className="px-3 py-2">src/projects.md</div>
+          <div className="px-3 py-2">contact/terminal.sh</div>
         </div>
 
-        <div className="grid gap-2 md:gap-3">
-          {introHighlights.map((item) => (
+        <div className="mt-8 rounded-[1.2rem] border border-white/6 bg-[#111418] p-4">
+          <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[#7f9183] md:text-[0.82rem]">
+            Status
+          </p>
+          <p className="mt-3 text-[1rem] font-semibold text-[#eff7f1] md:text-[1.25rem]">
+            Full Stack Developer
+          </p>
+          <p className="mt-2 text-[0.9rem] leading-6 text-[#aebbb2] md:text-[1rem]">
+            Shipping thoughtful UI, solid backend logic, and cleaner product
+            journeys.
+          </p>
+        </div>
+      </aside>
+
+      <div className="grid min-h-full grid-rows-[auto_1fr_auto]">
+        <div className="border-b border-white/6 bg-[#1b1f25] px-5 py-4 md:px-8 md:py-5">
+          <p className="font-mono text-[0.8rem] uppercase tracking-[0.2em] text-[#89a18f] md:text-[0.94rem]">
+            introduction.tsx
+          </p>
+          <h2 className="mt-3 max-w-[26rem] text-[1.7rem] font-black uppercase leading-[0.9] tracking-[-0.06em] text-[#f2f8f3] md:text-[2.8rem]">
+            Building full stack products with product-level care
+          </h2>
+        </div>
+
+        <div className="grid gap-5 p-5 md:grid-cols-[1.15fr_0.85fr] md:p-8">
+          <div className="rounded-[1.5rem] border border-white/7 bg-[#14181d] p-5 shadow-[0_20px_40px_rgba(0,0,0,0.22)] md:p-7">
+            <div className="flex items-center gap-2 font-mono text-[0.78rem] text-[#7dd97d] md:text-[0.9rem]">
+              <span>01</span>
+              <span className="text-[#5f7366]">{"// profile"}</span>
+            </div>
+
+            <h3 className="mt-4 text-[1.8rem] font-black uppercase leading-[0.9] tracking-[-0.06em] text-white md:text-[3rem]">
+              Ismail
+              <br />
+              Ahmed
+            </h3>
+
+            <p className="mt-5 max-w-[32rem] text-[1rem] leading-7 text-[#bcc8c0] md:text-[1.18rem] md:leading-8">
+              I design and build complete digital products, moving from
+              polished frontend experiences to dependable APIs, application
+              logic, and structured data systems that support real users.
+            </p>
+          </div>
+
+          <div className="grid gap-4">
+            <div className="rounded-[1.5rem] border border-[#7dd97d]/18 bg-[#12161a] p-5 md:p-6">
+              <p className="font-mono text-[0.76rem] uppercase tracking-[0.18em] text-[#89a18f] md:text-[0.9rem]">
+                execution
+              </p>
+              <p className="mt-3 text-[1.15rem] font-bold uppercase leading-tight tracking-[-0.04em] text-[#f4fbf6] md:text-[1.6rem]">
+                Thoughtful interfaces.
+                <br />
+                Reliable backend systems.
+              </p>
+            </div>
+
+            <div className="rounded-[1.5rem] border border-white/6 bg-[#111418] p-5 md:p-6">
+              <p className="font-mono text-[0.76rem] uppercase tracking-[0.18em] text-[#89a18f] md:text-[0.9rem]">
+                summary
+              </p>
+              <p className="mt-3 text-[0.95rem] leading-7 text-[#b8c4bb] md:text-[1.08rem] md:leading-8">
+                I enjoy turning rough ideas into clean, maintainable products
+                that feel calm on the surface and dependable underneath.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-3 border-t border-white/6 bg-[#181c21] p-5 md:grid-cols-3 md:p-6">
+          {introHighlights.map((item, index) => (
             <div
               key={item.label}
-              className="rounded-[1rem] border border-[#6b816f]/14 bg-white/68 px-3 py-2.5 md:px-3.5 md:py-3"
+              className="rounded-[1.25rem] border border-white/6 bg-[#111418] px-4 py-4"
             >
-              <p className="text-[0.48rem] uppercase tracking-[0.18em] text-[#657a6b] md:text-[0.58rem]">
-                {item.label}
+              <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[#7f9183] md:text-[0.84rem]">
+                0{index + 1} {item.label}
               </p>
-              <p className="mt-1 text-[0.72rem] font-bold text-[#15211a] md:text-[0.95rem]">
+              <p className="mt-2 text-[1rem] font-semibold text-[#f3fbf4] md:text-[1.22rem]">
                 {item.value}
               </p>
             </div>
           ))}
-        </div>
-      </div>
-
-      <div className="flex flex-col justify-between bg-[linear-gradient(180deg,rgba(246,249,246,0.96),rgba(229,238,229,0.98))] p-3 md:p-6">
-        <div>
-          <p className="text-[0.56rem] font-semibold uppercase tracking-[0.24em] text-[#5d7463] md:text-[0.7rem]">
-            Introduction
-          </p>
-          <h3 className="mt-2 max-w-[18rem] text-[0.95rem] font-black uppercase leading-[0.94] tracking-[-0.08em] text-[#16211b] md:text-[1.8rem]">
-            Full stack execution with product-level polish
-          </h3>
-        </div>
-
-        <div className="grid gap-3 md:grid-cols-[1.12fr_0.88fr] md:gap-4">
-          <div className="rounded-[1.25rem] border border-[#6b816f]/14 bg-white/74 p-3 shadow-[0_14px_32px_rgba(116,140,123,0.08)] md:p-5">
-            <p className="text-[0.5rem] font-semibold uppercase tracking-[0.22em] text-[#667b6c] md:text-[0.6rem]">
-              What I do
-            </p>
-            <p className="mt-2 text-[0.56rem] leading-4 text-[#3f5347] md:text-[0.74rem] md:leading-5">
-              I turn product ideas into shipped experiences, working across UI,
-              application logic, data flows, and backend architecture with a
-              strong focus on clarity and usability.
-            </p>
-          </div>
-
-          <div className="rounded-[1.25rem] border border-[#6b816f]/14 bg-[#dfeade]/76 p-3 md:p-5">
-            <p className="text-[0.5rem] font-semibold uppercase tracking-[0.22em] text-[#667b6c] md:text-[0.6rem]">
-              Working style
-            </p>
-            <p className="mt-2 text-[0.7rem] font-bold uppercase leading-tight tracking-[-0.05em] text-[#1a261f] md:text-[1rem]">
-              Thoughtful interfaces.
-              <br />
-              Dependable systems.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between rounded-[1rem] border border-[#6b816f]/12 bg-[#dde9dd]/78 px-3 py-2 md:px-4 md:py-3">
-          <span className="text-[0.52rem] uppercase tracking-[0.18em] text-[#5f7465] md:text-[0.62rem]">
-            Flow
-          </span>
-          <span className="text-[0.58rem] font-semibold text-[#213129] md:text-[0.72rem]">
-            Intro to Stack to Selected Work
-          </span>
         </div>
       </div>
     </section>
