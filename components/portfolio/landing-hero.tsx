@@ -95,7 +95,7 @@ export default function LandingHero({
             onClick={handleOpenClick}
             className="rounded-xl border border-[#415348]/10 bg-[#1c2a21] px-5 py-3 text-sm font-semibold text-[#eff5ef] transition-[transform,box-shadow,background-color] duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#243529] hover:shadow-[0_12px_32px_rgba(24,35,28,0.18)] active:translate-y-0 active:scale-[0.98]"
           >
-            Open
+            Card
           </button>
         </div>
 

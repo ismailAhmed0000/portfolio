@@ -152,8 +152,7 @@ export default function ContactTerminal() {
             </h2>
           </div>
           <p className="max-w-xs text-right text-sm leading-6 text-[#4b5f51]">
-            Press Enter and the terminal prints your contact links in a Mac
-            style window.
+            Press Enter and the terminal prints contact links
           </p>
         </div>
 
