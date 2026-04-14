@@ -43,31 +43,13 @@ body {
 }
 
 .terminal-pulse {
-  animation: terminal-pulse 4.8s ease-in-out infinite;
+  animation: terminal-pulse 7s ease-in-out infinite;
 }
 
 .terminal-cursor {
   animation: terminal-cursor-blink 1s step-end infinite;
 }
 
-.laptop-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(125, 217, 125, 0.5) rgba(20, 24, 29, 0.96);
-}
-
-.laptop-scroll::-webkit-scrollbar {
-  width: 10px;
-}
-
-.laptop-scroll::-webkit-scrollbar-track {
-  background: rgba(20, 24, 29, 0.94);
-}
-
-.laptop-scroll::-webkit-scrollbar-thumb {
-  border: 2px solid rgba(20, 24, 29, 0.94);
-  border-radius: 999px;
-  background: rgba(125, 217, 125, 0.48);
-}
 
 @keyframes terminal-type {
   0%,
@@ -96,15 +78,97 @@ body {
   100% {
     transform: translateY(0);
     box-shadow:
-      0 0 0 1px rgba(90, 115, 98, 0.08),
-      0 24px 80px rgba(104, 128, 111, 0.2);
+      0 0 0 1px rgba(90, 115, 98, 0.06),
+      0 20px 70px rgba(104, 128, 111, 0.16);
   }
 
   50% {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     box-shadow:
-      0 0 0 1px rgba(90, 115, 98, 0.16),
-      0 28px 90px rgba(124, 149, 130, 0.28);
+      0 0 0 1px rgba(90, 115, 98, 0.1),
+      0 26px 78px rgba(124, 149, 130, 0.22);
+  }
+}
+
+@keyframes land-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.1rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.land-rise {
+  animation: land-rise 0.78s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.land-rise--d0 {
+  animation-delay: 0ms;
+}
+
+.land-rise--d1 {
+  animation-delay: 85ms;
+}
+
+.land-rise--d2 {
+  animation-delay: 165ms;
+}
+
+.land-rise--d3 {
+  animation-delay: 235ms;
+}
+
+.land-rise--d4 {
+  animation-delay: 300ms;
+}
+
+.land-rise--d5 {
+  animation-delay: 365ms;
+}
+
+@keyframes land-ambient {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    opacity: 0.88;
+    transform: translate3d(0.6%, -0.4%, 0) scale(1.015);
+  }
+}
+
+.land-ambient {
+  animation: land-ambient 22s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .land-rise,
+  .land-rise--d0,
+  .land-rise--d1,
+  .land-rise--d2,
+  .land-rise--d3,
+  .land-rise--d4,
+  .land-rise--d5 {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .land-ambient {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .terminal-pulse {
+    animation: none;
+    transform: none;
   }
 }
 

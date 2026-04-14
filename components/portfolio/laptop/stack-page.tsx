@@ -1,75 +1,121 @@
 import { stackGroups } from "@/components/portfolio/data";
 
+const kw = "text-[#c792ea]";
+const str = "text-[#c3e88d]";
+const fn = "text-[#82aaff]";
+const prop = "text-[#89ddff]";
+const comment = "text-[#546e7a] italic";
+
 export default function StackPage() {
   return (
-    <section className="grid min-h-full grid-cols-[0.28fr_1fr] bg-[#1e2228] text-[#edf6ef]">
-      <aside className="border-r border-white/6 bg-[#171a1f] p-4 md:p-6">
-        <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-[#7f9183] md:text-[0.84rem]">
+    <section className="grid h-full min-h-0 grid-cols-[0.26fr_1fr] overflow-hidden bg-[#1e2228] text-[#edf6ef]">
+      {/* ── Sidebar ── */}
+      <aside className="min-h-0 overflow-y-hidden border-r border-white/6 bg-[#171a1f] p-3 md:p-5">
+        <p className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-[#7f9183] md:text-[0.76rem]">
           Explorer
         </p>
-
-        <div className="mt-5 space-y-3 font-mono text-[0.82rem] text-[#a7b5aa] md:text-[0.96rem]">
-          <div className="px-3 py-2">src/intro.tsx</div>
-          <div className="rounded-xl border border-[#7dd97d]/20 bg-[#0f1114] px-3 py-2 text-[#7dd97d]">
-            src/stack.json
+        <div className="mt-4 space-y-1.5 font-mono text-[0.72rem] text-[#a7b5aa] md:text-[0.84rem]">
+          <div className="flex items-center gap-1.5 px-2 py-1.5 text-[#546e7a]">
+            <span>›</span> intro.tsx
           </div>
-          <div className="px-3 py-2">src/projects.md</div>
+          <div className="flex items-center gap-1.5 rounded-lg border border-[#7dd97d]/20 bg-[#0f1114] px-2 py-1.5 text-[#7dd97d]">
+            <span className="text-[#546e7a]">›</span> stack.json
+          </div>
+          <div className="flex items-center gap-1.5 px-2 py-1.5 text-[#546e7a]">
+            <span>›</span> experience.md
+          </div>
         </div>
 
-        <div className="mt-8 rounded-[1.2rem] border border-white/6 bg-[#111418] p-4">
-          <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[#7f9183] md:text-[0.82rem]">
-            stack.exe
+        <div className="mt-6 rounded-xl border border-white/5 bg-[#111418] p-3">
+          <p className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-[#546e7a] md:text-[0.7rem]">
+            stack.json
           </p>
-          <p className="mt-3 text-[0.98rem] leading-7 text-[#b4c0b7] md:text-[1.08rem]">
-            Tools I reach for when building product UI, backend logic, and the
-            layer in between.
+          <p className="mt-2 font-mono text-[0.7rem] leading-5 text-[#7f9183] md:text-[0.8rem]">
+            Languages, frameworks, and databases I use to ship end-to-end work.
           </p>
         </div>
       </aside>
 
-      <div className="grid min-h-full grid-rows-[auto_1fr]">
-        <div className="border-b border-white/6 bg-[#1b1f25] px-5 py-4 md:px-8 md:py-5">
-          <p className="font-mono text-[0.8rem] uppercase tracking-[0.2em] text-[#89a18f] md:text-[0.94rem]">
-            stack.json
-          </p>
-          <h2 className="mt-3 max-w-[28rem] text-[1.7rem] font-black uppercase leading-[0.92] tracking-[-0.06em] text-[#f2f8f3] md:text-[2.8rem]">
-            Tools and systems I use to ship end-to-end work
-          </h2>
+      {/* ── Main ── */}
+      <div className="grid h-full min-h-0 grid-rows-[auto_1fr]">
+        <div className="border-b border-white/6 bg-[#1b1f25] px-4 py-2.5 md:px-6">
+          <div className="flex items-center gap-2 font-mono text-[0.65rem] text-[#546e7a] md:text-[0.75rem]">
+            <span>src</span><span>/</span>
+            <span className="text-[#89ddff]">stack.json</span>
+          </div>
         </div>
 
-        <div className="grid gap-4 p-5 md:p-8">
-          {stackGroups.map((group, index) => (
-            <article
-              key={group.title}
-              className="rounded-[1.5rem] border border-white/7 bg-[#14181d] p-5 shadow-[0_18px_36px_rgba(0,0,0,0.2)] md:p-6"
-            >
-              <div className="flex items-start justify-between gap-5">
-                <div>
-                  <p className="font-mono text-[0.76rem] uppercase tracking-[0.18em] text-[#89a18f] md:text-[0.9rem]">
-                    0{index + 1} {group.title}
-                  </p>
-                  <p className="mt-3 max-w-[42rem] text-[0.98rem] leading-7 text-[#bbc7bf] md:text-[1.12rem] md:leading-8">
-                    {group.summary}
-                  </p>
-                </div>
+        <div className="min-h-0 overflow-y-hidden px-4 py-4 font-mono text-[0.7rem] leading-[1.7] md:px-6 md:py-5 md:text-[0.82rem]">
+          <div className="flex gap-3">
+            <span className="w-5 shrink-0 select-none text-right text-[#546e7a]/60">1</span>
+            <span className="text-[#89ddff]">{"{"}</span>
+          </div>
 
-                <span className="rounded-full border border-[#7dd97d]/18 bg-[#122116] px-3 py-1.5 font-mono text-[0.72rem] uppercase tracking-[0.14em] text-[#8be18b] md:text-[0.82rem]">
-                  core
-                </span>
-              </div>
-
-              <div className="mt-5 flex flex-wrap gap-2.5">
-                {group.items.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border border-white/8 bg-[#20252b] px-3 py-2 text-[0.88rem] font-medium text-[#eef7f0] md:px-4 md:text-[1rem]"
-                  >
-                    {item}
+          {stackGroups.map((group, gi) => {
+            const baseLineNo = 2 + gi * 6;
+            return (
+              <div key={group.title}>
+                <div className="flex gap-3">
+                  <span className="w-5 shrink-0 select-none text-right text-[#546e7a]/60">{baseLineNo}</span>
+                  <span className="pl-4">
+                    <span className={comment}>{"// " + group.summary}</span>
                   </span>
+                </div>
+                <div className="flex gap-3">
+                  <span className="w-5 shrink-0 select-none text-right text-[#546e7a]/60">{baseLineNo + 1}</span>
+                  <span className="pl-4">
+                    <span className={prop}>&quot;{group.title}&quot;</span>
+                    <span className="text-[#89ddff]">:</span>{" "}
+                    <span className="text-[#89ddff]">[</span>
+                  </span>
+                </div>
+                {group.items.map((item, ii) => (
+                  <div key={item} className="flex gap-3">
+                    <span className="w-5 shrink-0 select-none text-right text-[#546e7a]/60">{baseLineNo + 2 + ii}</span>
+                    <span className="pl-8">
+                      <span className={str}>&quot;{item}&quot;</span>
+                      {ii < group.items.length - 1 && <span className="text-[#89ddff]">,</span>}
+                    </span>
+                  </div>
                 ))}
+                <div className="flex gap-3">
+                  <span className="w-5 shrink-0 select-none text-right text-[#546e7a]/60">{baseLineNo + 2 + group.items.length}</span>
+                  <span className="pl-4">
+                    <span className="text-[#89ddff]">]</span>
+                    {gi < stackGroups.length - 1 && <span className="text-[#89ddff]">,</span>}
+                  </span>
+                </div>
               </div>
-            </article>
-          ))}
+            );
+          })}
+
+          <div className="flex gap-3">
+            <span className="w-5 shrink-0 select-none text-right text-[#546e7a]/60">
+              {2 + stackGroups.reduce((a, g) => a + g.items.length + 3, 0)}
+            </span>
+            <span className="text-[#89ddff]">{"}"}</span>
+          </div>
+
+          <div className="mt-4 flex gap-3">
+            <span className="w-5 shrink-0 select-none text-right text-[#546e7a]/60" />
+            <span className="text-transparent">.</span>
+          </div>
+          <div className="flex gap-3">
+            <span className="w-5 shrink-0 select-none text-right text-[#546e7a]/60" />
+            <span>
+              <span className={comment}>{"// favourite combo"}</span>
+            </span>
+          </div>
+          <div className="flex gap-3">
+            <span className="w-5 shrink-0 select-none text-right text-[#546e7a]/60" />
+            <span>
+              <span className={kw}>const</span>{" "}
+              <span className={fn}>goto</span>{" "}
+              <span className="text-[#89ddff]">=</span>{" "}
+              <span className={str}>&quot;Laravel + Next.js + PostgreSQL&quot;</span>
+              <span className="text-[#89ddff]">;</span>
+            </span>
+          </div>
         </div>
       </div>
     </section>

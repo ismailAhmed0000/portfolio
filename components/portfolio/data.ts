@@ -1,85 +1,125 @@
 export const stackGroups = [
   {
-    title: "Frontend systems",
-    summary: "Responsive interfaces, design systems, motion, and usable UI.",
-    items: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+    title: "Languages",
+    summary: "Primary languages across frontend, backend, and systems work.",
+    items: ["JavaScript", "TypeScript", "Go", "Python", "PHP", "C#"],
   },
   {
-    title: "Backend foundations",
-    summary: "APIs, business logic, auth flows, and scalable app structure.",
-    items: ["Laravel", "Node.js", "PostgreSQL", "REST APIs"],
+    title: "Frameworks",
+    summary: "Frameworks I ship production work with daily.",
+    items: ["React.js", "Next.js", "Vue.js", "Laravel", "Node.js", "GoFiber"],
   },
   {
-    title: "Delivery mindset",
-    summary: "Shipping polished products with performance, clarity, and care.",
-    items: ["Product thinking", "Testing", "Refactoring", "Deployment"],
+    title: "Database",
+    summary: "Relational databases for structured, reliable data layers.",
+    items: ["MySQL", "PostgreSQL"],
   },
 ] as const;
 
-export const projectCards = [
+export const experienceItems = [
   {
-    title: "Wildlife Live",
-    type: "Full stack platform",
-    year: "2026",
-    role: "Lead product build",
-    summary:
-      "A realtime wildlife monitoring platform with live feeds, operational dashboards, and field-friendly responsive views.",
-    impact: "Built the frontend system, API-connected data views, and monitoring flows for a production-style product experience.",
+    role: "Core Developer",
+    company: "LoopCraft",
+    type: "Laravel Developer",
+    bullets: [
+      "Built and maintained RESTful APIs using Laravel",
+      "Integrated third-party APIs and external services",
+      "Designed database migrations, models, and relationships",
+      "Implemented backend logic for application features",
+      "Debugged issues and improved system performance",
+      "Used Git for version control and collaboration",
+    ],
   },
   {
-    title: "Covenant AI",
-    type: "Product build",
-    year: "2025",
-    role: "Full stack developer",
-    summary:
-      "AI-powered workflow tooling focused on clarity, clean architecture, and polished end-user interactions.",
-    impact: "Worked across interface logic, backend integration, and product refinement to make complex flows feel simple.",
+    role: "Administrative Officer",
+    company: "National Centre for Information Technology",
+    type: "Technical Support · Customer Service",
+    bullets: [
+      "Provided technical support as part of the customer service team at NCIT",
+    ],
+  },
+] as const;
+
+export const educationItems = [
+  {
+    degree: "Bachelor's Degree in Software Engineering",
+    institution: "Mianz International College",
   },
   {
-    title: "Buy & Sell",
-    type: "Marketplace",
-    year: "2025",
-    role: "Platform engineer",
-    summary:
-      "A commerce-style experience centered on listings, user dashboards, and dependable backend-driven interactions.",
-    impact: "Shaped the product journey from listing flows to dashboard states, backed by structured data and solid APIs.",
+    degree: "Diploma in Software Engineering",
+    institution: "Mianz International College",
+  },
+  {
+    degree: "Higher Secondary Education",
+    institution: "Center for Higher Secondary Education",
   },
 ] as const;
 
 export const introHighlights = [
   {
+    label: "Degree",
+    value: "BSc Software Engineering",
+  },
+  {
+    label: "Experience",
+    value: "LoopCraft · NCIT",
+  },
+  {
     label: "Focus",
-    value: "Full stack products",
-  },
-  {
-    label: "Strength",
-    value: "UI + API + DB",
-  },
-  {
-    label: "Approach",
-    value: "Clean, reliable, fast",
+    value: "Full stack · Laravel · React",
   },
 ] as const;
 
-export const screenPages = ["Intro", "Stack", "Projects"];
+export const personalProjects = [
+  {
+    name: "Portfolio v2",
+    tech: ["Next.js", "TypeScript", "Tailwind CSS"],
+    desc: "This portfolio — scroll-driven laptop display, animated work card, and terminal-style contact.",
+    status: "live",
+    year: "2026",
+  },
+  {
+    name: "GoLink",
+    tech: ["Go", "GoFiber", "PostgreSQL"],
+    desc: "A fast URL shortener with analytics, custom slugs, and a clean JSON API built in Go.",
+    status: "personal",
+    year: "2025",
+  },
+  {
+    name: "Taskflow CLI",
+    tech: ["Go", "SQLite"],
+    desc: "A terminal-based task manager with priorities, tags, and due-date reminders. Zero dependencies.",
+    status: "personal",
+    year: "2025",
+  },
+  {
+    name: "PricePulse",
+    tech: ["Python", "PostgreSQL", "Vue.js"],
+    desc: "Tracks product price history across local e-commerce sites and sends email alerts on drops.",
+    status: "personal",
+    year: "2024",
+  },
+] as const;
+
+export const screenPages = ["Intro", "Stack", "Experience", "Projects"];
 
 export const terminalContacts = [
   {
     command: "email",
     label: "Email",
-    value: "hello@ismail.dev",
-    href: "mailto:hello@ismail.dev",
+    value: "ismaeeeelahmed20@gmail.com",
+    href: "mailto:ismaeeeelahmed20@gmail.com",
   },
   {
     command: "github",
     label: "GitHub",
-    value: "github.com/ismailahmed",
-    href: "https://github.com/ismailahmed",
+    value: "github.com/ismailAhmed0000",
+    href: "https://github.com/ismailAhmed0000",
   },
   {
-    command: "linkedin",
-    label: "LinkedIn",
-    value: "linkedin.com/in/ismailahmed",
-    href: "https://www.linkedin.com/in/ismailahmed",
+    command: "phone",
+    label: "Phone",
+    value: "9135668",
+    href: "tel:9135668",
   },
 ] as const;

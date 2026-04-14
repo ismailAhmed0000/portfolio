@@ -1,16 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import { screenPages } from "@/components/portfolio/data";
 import IntroPage from "@/components/portfolio/laptop/intro-page";
 import ProjectsPage from "@/components/portfolio/laptop/projects-page";
 import StackPage from "@/components/portfolio/laptop/stack-page";
+import PersonalProjectsPage from "@/components/portfolio/laptop/personal-projects-page";
 
-const pages = [IntroPage, StackPage, ProjectsPage];
-const tabLabels = ["intro.tsx", "stack.json", "projects.md"];
+const pages = [IntroPage, StackPage, ProjectsPage, PersonalProjectsPage];
+const tabLabels = ["intro.tsx", "stack.json", "experience.md", "projects.ts"];
 
-export default function LaptopFrame() {
-  const [activeIndex, setActiveIndex] = useState(0);
+type LaptopFrameProps = {
+  activeIndex: number;
+};
+
+export default function LaptopFrame({ activeIndex }: LaptopFrameProps) {
+  const clamped = Math.max(0, Math.min(screenPages.length - 1, activeIndex));
 
   return (
     <div className="relative w-full max-w-[73rem]">
@@ -36,7 +40,7 @@ export default function LaptopFrame() {
                   <div
                     key={label}
                     className={`rounded-t-[0.9rem] border border-b-0 px-3 py-2 font-mono text-[0.58rem] md:px-4 md:text-[0.72rem] ${
-                      activeIndex === index
+                      clamped === index
                         ? "border-white/8 bg-[#1e2228] text-[#eff6f0]"
                         : "border-transparent bg-transparent text-[#7e8a82]"
                     }`}
@@ -52,7 +56,7 @@ export default function LaptopFrame() {
                     <span
                       key={page}
                       className={`h-2 rounded-full transition-all duration-300 ${
-                        activeIndex === index
+                        clamped === index
                           ? "w-6 bg-[#7dd97d]"
                           : "w-2 bg-[#456253]"
                       }`}
@@ -60,29 +64,24 @@ export default function LaptopFrame() {
                   ))}
                 </div>
 
-                <div
-                  className="laptop-scroll h-full snap-y snap-mandatory overflow-y-auto overscroll-contain scroll-smooth"
-                  onScroll={(event) => {
-                    const viewportHeight = event.currentTarget.clientHeight;
-
-                    if (viewportHeight === 0) {
-                      return;
-                    }
-
-                    const nextIndex = Math.round(
-                      event.currentTarget.scrollTop / viewportHeight,
-                    );
-
-                    setActiveIndex(
-                      Math.max(0, Math.min(screenPages.length - 1, nextIndex)),
-                    );
-                  }}
-                >
-                  {pages.map((PageComponent, index) => (
-                    <div key={screenPages[index]} className="min-h-full snap-start">
-                      <PageComponent />
-                    </div>
-                  ))}
+                <div className="h-full overflow-hidden">
+                  <div
+                    className="flex h-full flex-col"
+                    style={{
+                      transform: `translateY(${-clamped * 100}%)`,
+                      transition: "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)",
+                      willChange: "transform",
+                    }}
+                  >
+                    {pages.map((PageComponent, index) => (
+                      <div
+                        key={screenPages[index]}
+                        className="h-full w-full shrink-0 overflow-hidden"
+                      >
+                        <PageComponent />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
