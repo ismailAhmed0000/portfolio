@@ -103,6 +103,32 @@ export const personalProjects = [
 
 export const screenPages = ["Intro", "Stack", "Experience", "Projects"];
 
+export const githubProfileUrl = "https://github.com/ismailAhmed0000";
+
+export const mobileApps = [
+  {
+    name: "GoLink",
+    tech: ["Go", "GoFiber", "PostgreSQL"],
+    desc: "A fast URL shortener with analytics, custom slugs, and a clean JSON API built in Go.",
+    initials: "GL",
+    accent: "#00acc1",
+  },
+  {
+    name: "Taskflow CLI",
+    tech: ["Go", "SQLite"],
+    desc: "A terminal-based task manager with priorities, tags, and due-date reminders. Zero dependencies.",
+    initials: "TF",
+    accent: "#82aaff",
+  },
+  {
+    name: "Portfolio v2",
+    tech: ["Next.js", "TypeScript", "Tailwind"],
+    desc: "Scroll-driven laptop display, animated work cards, and a terminal-style contact form.",
+    initials: "P2",
+    accent: "#7dd97d",
+  },
+] as const;
+
 export const terminalContacts = [
   {
     command: "email",
