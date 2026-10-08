@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
 type WorkCardOverlayProps = {
@@ -8,9 +7,11 @@ type WorkCardOverlayProps = {
   onViewLaptop: () => void;
 };
 
-export default function WorkCardOverlay({
-  onClose,
-}: WorkCardOverlayProps) {
+// Fine cross-hatch that reads as woven lanyard fabric.
+const WEAVE =
+  "repeating-linear-gradient(0deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 3px), repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0px,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 4px)";
+
+export default function WorkCardOverlay({ onClose }: WorkCardOverlayProps) {
   const [entered, setEntered] = useState(false);
   const [closing, setClosing] = useState(false);
 
@@ -93,333 +94,129 @@ export default function WorkCardOverlay({
         onClick={beginClose}
       />
 
-      {/* Column anchored to top:0, right-center of viewport */}
-      <div
-        className={`pointer-events-none fixed top-0 z-[1] flex flex-col items-center ${closing ? "card-exit-anim" : "card-drop-anim"}`}
-        style={{ right: "clamp(2.5rem, 14vw, 11rem)" }}
-        onAnimationEnd={(event) => {
-          if (event.animationName === "card-exit") {
-            onClose();
-          }
-        }}
-      >
-        {/* ── DARK WOVEN STRAP ── */}
+      {/* Column anchored to top:0, centred horizontally */}
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-[1] flex justify-center">
         <div
-          className="w-[16px] shrink-0"
-          style={{
-            height: "clamp(64px, 12vh, 112px)",
-            background:
-              "repeating-linear-gradient(180deg,#050505 0px,#101010 2px,#0a0a0a 4px,#030303 6px,#0c0c0c 8px)",
-            boxShadow:
-              "inset 2px 0 0 rgba(255,255,255,0.04), inset -2px 0 0 rgba(0,0,0,0.65), 2px 0 10px rgba(0,0,0,0.55)",
+          className={`flex flex-col items-center ${closing ? "card-exit-anim" : "card-drop-anim"}`}
+          onAnimationEnd={(event) => {
+            if (event.animationName === "card-exit") {
+              onClose();
+            }
           }}
-          aria-hidden
-        />
-
-        {/* ── METAL CARABINER CLIP ── */}
-        <div className="pointer-events-none relative flex shrink-0 flex-col items-center" aria-hidden>
+        >
+          {/* ── WOVEN GREEN LANYARD ── long enough to hang the card mid-screen */}
           <div
-            style={{
-              width: "24px",
-              height: "36px",
-              borderRadius: "5px 5px 4px 4px",
-              background:
-                "linear-gradient(175deg,#c8cdd4 0%,#8e949e 28%,#a8aeb8 55%,#606670 80%,#8a9098 100%)",
-              boxShadow:
-                "inset 1px 1px 0 rgba(255,255,255,0.5), inset -1px -1px 0 rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.6)",
-              position: "relative",
-            }}
+            className="relative z-[2] flex shrink-0 flex-col items-center"
+            style={{ marginBottom: "-26px" }}
+            aria-hidden
           >
+            {/* wide upper strap */}
             <div
+              className="w-[34px]"
               style={{
-                position: "absolute",
-                left: "50%",
-                top: "50%",
-                width: "10px",
-                height: "2px",
-                background: "#4a5058",
-                borderRadius: "1px",
-                transform: "translate(-50%,-50%)",
-                boxShadow: "0 1px 0 rgba(255,255,255,0.18)",
+                height: "max(40px, calc(50vh - 330px))",
+                background: `${WEAVE}, linear-gradient(90deg,#1f3a29 0%,#2f5139 22%,#2b4b35 78%,#1c3424 100%)`,
+                boxShadow: "0 6px 16px rgba(0,0,0,0.3)",
+              }}
+            />
+
+            {/* fabric tapers into the crimp */}
+            <div
+              className="w-[34px]"
+              style={{
+                height: "14px",
+                clipPath: "polygon(0 0,100% 0,82% 100%,18% 100%)",
+                background: `${WEAVE}, linear-gradient(90deg,#1f3a29,#2f5139 50%,#1c3424)`,
+              }}
+            />
+
+            {/* metal crimp sleeve */}
+            <div
+              className="relative -my-[3px] h-[46px] w-[26px] rounded-[4px]"
+              style={{
+                background:
+                  "linear-gradient(90deg,#4f5450 0%,#9ba19c 18%,#e4e8e4 34%,#a9afaa 52%,#6c726d 74%,#3c403d 100%)",
+                boxShadow:
+                  "0 4px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -2px 3px rgba(0,0,0,0.35)",
+              }}
+            >
+              <span className="absolute inset-x-0 bottom-[7px] h-px bg-black/25" />
+            </div>
+
+            {/* narrower lower strap looping through the card slot */}
+            <div
+              className="w-[26px]"
+              style={{
+                height: "50px",
+                clipPath: "polygon(0 0,100% 0,100% 72%,94% 100%,6% 100%,0 72%)",
+                background: `${WEAVE}, linear-gradient(90deg,#1f3a29,#2f5139 45%,#1c3424)`,
+                boxShadow: "inset 0 -8px 10px rgba(0,0,0,0.25)",
               }}
             />
           </div>
-          <div
-            style={{
-              width: "18px",
-              height: "9px",
-              borderRadius: "0 0 9px 9px",
-              border: "2.5px solid #8e949e",
-              borderTop: "none",
-              background: "transparent",
-              marginTop: "-2px",
-              boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.35)",
-            }}
-          />
-        </div>
 
-        {/* ── DARK PLASTIC SLEEVE ── */}
-        <div
-          className="pointer-events-auto relative shrink-0"
-          style={{
-            width: "clamp(228px, 21vw, 308px)",
-            padding: "7px",
-            background:
-              "linear-gradient(145deg,rgba(22,24,28,0.97) 0%,rgba(12,14,18,0.98) 100%)",
-            borderRadius: "13px",
-            border: "2px solid rgba(42,48,56,0.85)",
-            boxShadow:
-              "0 0 0 1px rgba(0,0,0,0.5), 0 32px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.04)",
-            marginTop: "-2px",
-            pointerEvents: closing ? "none" : "auto",
-          }}
-        >
-          {/* sleeve top slot grooves */}
-          <div className="mb-1.5 flex justify-center gap-2" aria-hidden>
-            {[0, 1].map((i) => (
-              <div
-                key={i}
-                style={{
-                  width: "34px",
-                  height: "7px",
-                  background:
-                    "linear-gradient(180deg,#14161c 0%,#0a0b0e 100%)",
-                  borderRadius: "3px",
-                  boxShadow: "inset 0 1px 3px rgba(0,0,0,0.85)",
-                  border: "1px solid rgba(255,255,255,0.03)",
-                }}
-              />
-            ))}
-          </div>
-
-          {/* ── CARD INSIDE SLEEVE (DARK THEME) ── */}
+          {/* ── PASS ── */}
           <div
+            className="pointer-events-auto relative shrink-0"
             style={{
-              borderRadius: "8px",
-              overflow: "hidden",
-              background: "#040506",
+              width: "clamp(260px, 26vw, 340px)",
+              padding: "1.1rem 1.25rem 1.4rem",
+              background: "#c5c7c3",
+              borderRadius: "14px",
               boxShadow:
-                "0 2px 20px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.02)",
+                "0 30px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.5)",
+              pointerEvents: closing ? "none" : "auto",
             }}
           >
-            {/* card header */}
+            {/* strap slot */}
             <div
-              className="relative overflow-hidden"
-              style={{
-                height: "clamp(72px, 13vh, 104px)",
-                background:
-                  "linear-gradient(135deg,#0c0d10 0%,#08090c 45%,#030304 100%)",
-                borderBottom: "1px solid rgba(255,255,255,0.03)",
-              }}
-            >
-              {/* subtle wave accent */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "-16px",
-                  right: "-16px",
-                  width: "65%",
-                  height: "70px",
-                  background: "rgba(255,255,255,0.015)",
-                  borderRadius: "60% 0 0 60%",
-                }}
-                aria-hidden
-              />
-              {/* subtle divider bar */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: "2px",
-                  background:
-                    "linear-gradient(90deg,transparent,rgba(48,54,62,0.9) 22%,rgba(58,66,76,0.95) 50%,rgba(48,54,62,0.9) 78%,transparent)",
-                  opacity: 0.65,
-                }}
-                aria-hidden
-              />
-              <div className="relative flex h-full items-center gap-2.5 px-3.5">
-                <span
-                  className="font-black"
-                  style={{
-                    fontSize: "clamp(0.9rem, 1.6vw, 1.05rem)",
-                    letterSpacing: "0.06em",
-                    fontFamily: "monospace",
-                    color: "rgba(92,100,112,0.96)",
-                  }}
-                >
-                  IA
-                </span>
-                <span
-                  style={{
-                    fontSize: "0.52rem",
-                    fontFamily: "monospace",
-                    color: "rgba(58,64,74,0.92)",
-                    letterSpacing: "0.2em",
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                  }}
-                >
-                  PORTFOLIO
-                </span>
-              </div>
+              className="mx-auto h-[10px] w-[58px] rounded-full bg-[#1b1d1b]"
+              style={{ boxShadow: "inset 0 2px 3px rgba(0,0,0,0.6)" }}
+              aria-hidden
+            />
+
+            <div className="mt-6 flex items-center justify-between font-mono text-[0.68rem] tracking-[0.06em] text-[#2a2d29]">
+              <span>DEVELOPER PASS</span>
+              <span>01 / ∞</span>
             </div>
 
-            {/* card body */}
-            <div className="relative px-3.5 pb-6 pt-5">
-              {/* left dark accent bar */}
-              <div
-                className="absolute left-0 top-0 bottom-0 w-[6px]"
-                style={{
-                  background:
-                    "linear-gradient(180deg,#101218 0%,#060708 100%)",
-                  borderRight: "1px solid rgba(255,255,255,0.02)",
-                }}
-                aria-hidden
-              />
+            {/* lime panel */}
+            <div
+              className="mt-4 flex items-center justify-center rounded-[4px] bg-[#a4c062]"
+              style={{ aspectRatio: "1.55 / 1" }}
+              aria-hidden
+            >
+              <span className="font-mono text-[clamp(4rem,7vw,5.5rem)] font-black leading-none text-[#151715]">
+                {"{ }"}
+              </span>
+            </div>
 
-              {/* circular photo */}
-              <div
-                className="mx-auto mb-5"
-                style={{
-                  width: "clamp(64px, 11vw, 86px)",
-                  height: "clamp(88px, 16vh, 118px)",
-                }}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: "50%",
-                    overflow: "hidden",
-                    border: "2px solid rgba(48,54,64,0.85)",
-                    boxShadow:
-                      "0 0 0 2px rgba(0,0,0,0.6), 0 8px 22px rgba(0,0,0,0.65)",
-                    position: "relative",
-                    background: "#050608",
-                  }}
-                >
-                  <Image
-                    src="/work-card-placeholder.svg"
-                    alt=""
-                    fill
-                    className="object-cover object-center opacity-90"
-                    sizes="86px"
-                    priority
-                  />
-                </div>
-              </div>
+            <h2
+              id="work-card-title"
+              className="mt-6 text-[clamp(1.6rem,2.6vw,2.1rem)] font-bold leading-[1.08] tracking-[-0.01em] text-[#1b1d1b]"
+            >
+              Creative
+              <br />
+              developer.
+            </h2>
 
-              <p
-                id="work-card-title"
-                className="text-center font-bold uppercase"
-                style={{
-                  fontSize: "clamp(0.78rem, 1.5vw, 0.95rem)",
-                  letterSpacing: "0.04em",
-                  color: "rgba(118,126,138,0.97)",
-                }}
-              >
-                Ismail Ahmed
-              </p>
-              <p
-                className="mt-2 text-center font-semibold"
-                style={{
-                  fontSize: "clamp(0.56rem, 0.95vw, 0.68rem)",
-                  color: "rgba(72,80,90,0.92)",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                }}
-              >
-                Full Stack Engineer
-              </p>
+            <div className="mt-4 space-y-1.5 font-mono text-[0.7rem] tracking-[0.04em] text-[#2a2d29]">
+              <p>FULL STACK + MOBILE</p>
+              <p>IDEAS → EXPERIENCES</p>
+            </div>
 
-              {/* dark info strip */}
-              <div
-                className="relative mt-6 overflow-hidden"
-                style={{
-                  borderRadius: "7px",
-                  background:
-                    "linear-gradient(135deg,#050608 0%,#020304 100%)",
-                  border: "1px solid rgba(255,255,255,0.03)",
-                  padding: "0.85rem 0.85rem",
-                }}
-              >
-                <div className="flex items-center justify-between">
-                  <span
-                    style={{
-                      fontSize: "0.52rem",
-                      color: "rgba(72,78,88,0.95)",
-                      fontFamily: "monospace",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Staff No.
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "0.55rem",
-                      color: "rgba(88,96,108,0.95)",
-                      fontFamily: "monospace",
-                      letterSpacing: "0.12em",
-                      fontWeight: 700,
-                    }}
-                  >
-                    67
-                  </span>
-                </div>
-                <div
-                  className="mt-1.5"
-                  style={{
-                    height: "1px",
-                    background:
-                      "linear-gradient(90deg,transparent,rgba(255,255,255,0.03),transparent)",
-                  }}
-                  aria-hidden
+            {/* barcode */}
+            <div
+              className="mt-5 flex h-[30px] w-[86%] items-stretch gap-[2px]"
+              aria-hidden
+            >
+              {Array.from({ length: 46 }).map((_, i) => (
+                <span
+                  key={i}
+                  className="block bg-[#1b1d1b]"
+                  style={{ width: `${1 + ((i * 7 + 3) % 3)}px` }}
                 />
-                <div className="mt-1.5 flex items-center justify-between">
-                  <span
-                    style={{
-                      fontSize: "0.52rem",
-                      color: "rgba(72,78,88,0.95)",
-                      fontFamily: "monospace",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Valid Thru
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "0.52rem",
-                      color: "rgba(68,76,86,0.9)",
-                      fontFamily: "monospace",
-                      letterSpacing: "0.1em",
-                    }}
-                  >
-                    12 / 26
-                  </span>
-                </div>
-              </div>
-
-              {/* barcode */}
-              <div
-                className="mx-auto mt-6 flex items-end justify-center gap-[1.5px]"
-                style={{ width: "84%" }}
-                aria-hidden
-              >
-                {Array.from({ length: 34 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className="inline-block w-[2px]"
-                    style={{
-                      height: `${11 + ((i * 13 + 5) % 6) * 3}px`,
-                      background: "rgba(70,78,88,0.45)",
-                    }}
-                  />
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </div>

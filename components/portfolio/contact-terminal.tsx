@@ -139,10 +139,10 @@ export default function ContactTerminal() {
   return (
     <section
       id="contact"
-      className="relative bg-[#c2d8c4] px-5 pb-24 pt-8 md:px-8 md:pb-32 md:pt-12"
+      className="relative bg-[#c2d8c4] px-5 pb-16 pt-8 md:px-8 md:pb-32 md:pt-12"
     >
       <div className="mx-auto max-w-5xl">
-        <div className="mb-5 flex items-end justify-between gap-4">
+        <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between md:gap-4">
           <div>
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[#566c5c]">
               Contact Terminal
@@ -151,7 +151,7 @@ export default function ContactTerminal() {
               Let&apos;s connect
             </h2>
           </div>
-          <p className="max-w-xs text-right text-sm leading-6 text-[#4b5f51]">
+          <p className="max-w-xs text-sm leading-6 text-[#4b5f51] md:text-right">
             Press Enter and the terminal prints contact links
           </p>
         </div>
@@ -174,7 +174,7 @@ export default function ContactTerminal() {
 
           <div
             ref={historyRef}
-            className="h-[25rem] overflow-y-auto bg-[radial-gradient(circle_at_top,rgba(37,46,41,0.56),transparent_28%),linear-gradient(180deg,#0f1412_0%,#0b0f0e_100%)] px-4 py-4 font-mono text-[0.82rem] text-[#d6e4d7] md:px-5 md:py-5 md:text-[0.92rem]"
+            className="h-[16rem] overflow-y-auto md:h-[25rem] bg-[radial-gradient(circle_at_top,rgba(37,46,41,0.56),transparent_28%),linear-gradient(180deg,#0f1412_0%,#0b0f0e_100%)] px-4 py-4 font-mono text-[0.82rem] text-[#d6e4d7] md:px-5 md:py-5 md:text-[0.92rem]"
           >
             <div className="space-y-3">
               {history.map((line) => {
@@ -198,7 +198,9 @@ export default function ContactTerminal() {
                       </p>
                       <a
                         href={line.href}
-                        target={line.href?.startsWith("http") ? "_blank" : undefined}
+                        target={
+                          line.href?.startsWith("http") ? "_blank" : undefined
+                        }
                         rel={
                           line.href?.startsWith("http")
                             ? "noreferrer"
