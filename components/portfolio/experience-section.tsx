@@ -1,6 +1,8 @@
 "use client";
 
-import { useId, useRef, useState, type CSSProperties } from "react";
+import { useId, type CSSProperties } from "react";
+import Reveal from "@/components/portfolio/reveal";
+import SwipeCarousel from "@/components/portfolio/swipe-carousel";
 
 type Job = {
   number: string;
@@ -233,73 +235,21 @@ function JobDetails({ job }: { job: Job }) {
 }
 
 function JobsCarousel({ jobs }: { jobs: Job[] }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-
-  const onScroll = () => {
-    const track = trackRef.current;
-    const first = track?.firstElementChild as HTMLElement | null;
-
-    if (!track || !first) {
-      return;
-    }
-
-    const step = first.offsetWidth + 16;
-    setActive(Math.min(jobs.length - 1, Math.round(track.scrollLeft / step)));
-  };
-
-  const goTo = (index: number) => {
-    const card = trackRef.current?.children[index] as HTMLElement | undefined;
-    card?.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest",
-    });
-  };
-
   return (
-    <div>
-      <div
-        ref={trackRef}
-        onScroll={onScroll}
-        className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-[10%] pb-2 pt-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {jobs.map((job, index) => (
-          <div
-            key={job.code}
-            className={`w-[78%] shrink-0 snap-center transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-              index === active ? "opacity-100" : "scale-[0.94] opacity-45"
-            }`}
-            aria-hidden={index !== active}
-          >
+    <SwipeCarousel
+      slides={jobs.map((job) => ({
+        id: job.code,
+        label: job.company,
+        content: (
+          <>
             <div className="flex justify-center">
               <StaffBadge job={job} />
             </div>
             <JobDetails job={job} />
-          </div>
-        ))}
-      </div>
-
-      {/* switcher: pills slide the carousel; swiping updates them */}
-      <div className="mt-6 flex items-center justify-center gap-2">
-        {jobs.map((job, index) => (
-          <button
-            key={job.code}
-            type="button"
-            onClick={() => goTo(index)}
-            aria-label={`Show ${job.company}`}
-            aria-current={index === active}
-            className={`flex h-8 items-center rounded-full px-3 font-mono text-[0.62rem] uppercase tracking-[0.12em] transition-all duration-500 ${
-              index === active
-                ? "bg-[#18231c] text-[#eef5ef]"
-                : "bg-[#18231c]/8 text-[#5a7568]"
-            }`}
-          >
-            {job.company}
-          </button>
-        ))}
-      </div>
-    </div>
+          </>
+        ),
+      }))}
+    />
   );
 }
 
@@ -325,7 +275,7 @@ export default function ExperienceSection() {
       `}</style>
 
       <div className="mx-auto max-w-[72rem]">
-        <div className="flex items-end justify-between gap-6">
+        <Reveal className="flex items-end justify-between gap-6">
           <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-black leading-none tracking-[-0.04em] text-[#18231c]">
             Where I&rsquo;ve Worked
           </h2>
@@ -334,36 +284,40 @@ export default function ExperienceSection() {
             <br />
             Same curiosity.
           </p>
-        </div>
+        </Reveal>
 
         {/* phones: current roles carousel, past roles below */}
         <div className="mt-2 md:hidden">
-          <JobsCarousel jobs={CURRENT_JOBS} />
+          <Reveal variant="scale">
+            <JobsCarousel jobs={CURRENT_JOBS} />
+          </Reveal>
 
           {PAST_JOBS.length > 0 ? (
-            <div className="mt-16">
+            <Reveal className="mt-16" variant="scale">
               <p className="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-[#5a7568]">
                 Previously
               </p>
               <div className="mt-2">
                 <JobsCarousel jobs={PAST_JOBS} />
               </div>
-            </div>
+            </Reveal>
           ) : null}
         </div>
 
         {/* tablet and up: all roles side by side */}
         <div className="mt-2 hidden gap-y-16 md:grid md:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-[#5a7568]/20">
-          {JOBS.map((job) => (
-            <div
+          {JOBS.map((job, index) => (
+            <Reveal
               key={job.code}
+              delay={index * 120}
+              variant="scale"
               className="flex flex-col md:px-6 lg:px-5 lg:first:pl-0 lg:last:pr-0"
             >
               <div className="flex justify-center">
                 <StaffBadge job={job} />
               </div>
               <JobDetails job={job} />
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

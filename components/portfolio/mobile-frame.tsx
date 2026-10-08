@@ -10,6 +10,7 @@ import {
 } from "@/components/portfolio/data";
 import {
   formatTime,
+  PHONE_WIDTH_SMALL,
   StatusIcons,
   useCurrentMinute,
 } from "@/components/portfolio/phone-status";
@@ -66,7 +67,7 @@ function AppIcon({ app, size }: { app: MobileApp; size: "sm" | "lg" }) {
       className={`flex shrink-0 items-center justify-center font-mono font-bold text-[#0b0f0c] shadow-[0_6px_14px_rgba(0,0,0,0.35)] ${
         size === "lg"
           ? "h-12 w-12 rounded-[0.9rem] text-[0.8rem]"
-          : "h-[3.25rem] w-[3.25rem] rounded-[1rem] text-[0.78rem] md:h-14 md:w-14"
+          : "aspect-square w-[min(3.25rem,100%)] rounded-[28%] text-[0.78rem] md:w-14"
       }`}
       style={{
         background: `linear-gradient(150deg, ${app.accent} 0%, color-mix(in srgb, ${app.accent} 70%, #000) 100%)`,
@@ -114,10 +115,10 @@ function HomeScreen({
             onClick={() => onOpen(app.slug)}
             className="group flex flex-col items-center gap-1.5"
           >
-            <span className="transition-transform duration-200 group-hover:-translate-y-0.5 group-active:scale-90">
+            <span className="flex w-full justify-center transition-transform duration-200 group-hover:-translate-y-0.5 group-active:scale-90">
               <AppIcon app={app} size="sm" />
             </span>
-            <span className="w-full truncate text-center text-[0.62rem] font-medium text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)] md:text-[0.68rem]">
+            <span className="w-full truncate text-center text-[0.56rem] font-medium tracking-[-0.01em] text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)] md:text-[0.68rem]">
               {app.name}
             </span>
           </button>
@@ -345,7 +346,9 @@ export default function MobileFrame({ progress }: MobileFrameProps) {
     <div
       className="relative"
       style={{
-        width: "min(34rem, 78vw, calc((100dvh - 5rem) * 9 / 19.5))",
+        width: wide
+          ? "min(34rem, 78vw, calc((100dvh - 5rem) * 9 / 19.5))"
+          : PHONE_WIDTH_SMALL,
         transform: wide
           ? `translate3d(${(1 - eased) * 60}%, 0, 0) rotateY(${(1 - eased) * -16}deg) scale(${0.92 + eased * 0.08})`
           : `translate3d(0, ${(1 - eased) * 8}%, 0) scale(${0.94 + eased * 0.06})`,

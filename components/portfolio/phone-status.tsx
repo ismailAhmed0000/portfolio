@@ -61,3 +61,7 @@ export function StatusIcons() {
     </span>
   );
 }
+
+// Shared iPhone width on small screens, so phones shown side by side match.
+export const PHONE_WIDTH_SMALL =
+  "min(20rem, 74vw, calc((100svh - 13rem) * 9 / 19.5))";

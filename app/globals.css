@@ -177,3 +177,39 @@ body {
     opacity: 0;
   }
 }
+
+/* Scroll reveal (components/portfolio/reveal.tsx) */
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal--up {
+  transform: translate3d(0, 2.25rem, 0);
+}
+
+.reveal--scale {
+  transform: translate3d(0, 2.5rem, 0) scale(0.94);
+  filter: blur(6px);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal--up,
+  .reveal--scale {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
