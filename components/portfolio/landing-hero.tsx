@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 type LandingHeroProps = {
   onOpenLaptop: () => void;
@@ -45,6 +45,43 @@ function scrollToId(id: string) {
 
 export default function LandingHero({ onOpenLaptop }: LandingHeroProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Hero content drifts up and fades as it scrolls away.
+  useEffect(() => {
+    const element = contentRef.current;
+
+    if (
+      !element ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    let frame: number | null = null;
+
+    const update = () => {
+      frame = null;
+      const progress = Math.min(1, window.scrollY / window.innerHeight);
+      element.style.transform = `translate3d(0, ${progress * -12}vh, 0) scale(${1 - progress * 0.06})`;
+      element.style.opacity = String(1 - progress * 0.85);
+    };
+
+    const onScroll = () => {
+      if (frame === null) {
+        frame = window.requestAnimationFrame(update);
+      }
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame !== null) {
+        window.cancelAnimationFrame(frame);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) {
@@ -173,7 +210,10 @@ export default function LandingHero({ onOpenLaptop }: LandingHeroProps) {
           </div>
         </div>
 
-        <div className="relative flex flex-1 flex-col items-center justify-center pb-10 pt-6 text-center md:pb-12 md:pt-16">
+        <div
+          ref={contentRef}
+          className="relative flex flex-1 origin-top flex-col items-center justify-center pb-10 pt-6 text-center md:pb-12 md:pt-16"
+        >
           <div className="land-rise land-rise--d2 w-full max-w-full">
             <div className="terminal-pulse mx-auto w-max max-w-full rounded-[2rem] border border-[#6e8673]/35 bg-[#edf4ed]/82 px-5 py-4 shadow-[0_0_0_1px_rgba(90,115,98,0.08),0_24px_80px_rgba(104,128,111,0.2)]">
               <div className="mb-3 flex items-center justify-center gap-2">

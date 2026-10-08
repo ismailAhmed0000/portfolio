@@ -5,6 +5,7 @@ import { useState } from "react";
 import { projects, type Project } from "@/components/portfolio/data";
 import {
   formatTime,
+  PHONE_WIDTH_SMALL,
   StatusIcons,
   useCurrentMinute,
 } from "@/components/portfolio/phone-status";
@@ -305,7 +306,7 @@ function TabsIcon() {
   );
 }
 
-function PhoneBrowser() {
+export function PhoneBrowser() {
   const now = useCurrentMinute();
   const [openSlug, setOpenSlug] = useState<string | null>(null);
   const [lastSlug, setLastSlug] = useState(projects[0]?.slug);
@@ -317,10 +318,7 @@ function PhoneBrowser() {
   };
 
   return (
-    <div
-      className="relative md:hidden"
-      style={{ width: "min(21rem, 84vw, calc((100dvh - 6rem) * 9 / 19.5))" }}
-    >
+    <div className="relative" style={{ width: PHONE_WIDTH_SMALL }}>
       <style>{`
         @keyframes safari-open {
           from { opacity: 0; transform: scale(0.92); }
@@ -481,9 +479,6 @@ export default function LaptopFrame() {
 
   return (
     <>
-      {/* Phones get an iPhone with Safari tabs; the laptop shows from md. */}
-      <PhoneBrowser />
-
       <div className="relative hidden w-[88%] max-w-[73rem] md:block xl:w-full">
         <div className="relative rounded-[1.1rem] bg-[linear-gradient(180deg,#1d1d1f_0%,#080809_100%)] p-[6px] shadow-[0_18px_60px_rgba(0,0,0,0.45)] md:rounded-[2rem] md:p-[10px] md:shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
           <div className="absolute left-1/2 top-[2px] z-20 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-[#111] shadow-[0_0_0_1px_rgba(255,255,255,0.06)] md:top-[7px] md:h-[8px] md:w-[8px]" />

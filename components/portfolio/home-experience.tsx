@@ -5,7 +5,9 @@ import ContactTerminal from "@/components/portfolio/contact-terminal";
 import ExperienceSection from "@/components/portfolio/experience-section";
 import LandingHero from "@/components/portfolio/landing-hero";
 import LaptopFrame from "@/components/portfolio/laptop-frame";
+import Reveal from "@/components/portfolio/reveal";
 import MobileFrame from "@/components/portfolio/mobile-frame";
+import PhoneShowcase from "@/components/portfolio/phone-showcase";
 import { clamp } from "@/components/portfolio/utils";
 
 const MOBILE_TRACK_VH = 220;
@@ -99,13 +101,23 @@ export default function HomeExperience() {
       <ExperienceSection />
 
       <section ref={laptopRef} id="laptop" className="relative bg-[#c2d8c4]">
-        <div className="relative flex items-center justify-center overflow-hidden px-4 py-10 md:min-h-[100dvh] md:px-8 md:py-20">
+        {/* phones: scroll-driven slide between the two iPhones (sticky can't sit inside overflow-hidden) */}
+        <div className="md:hidden">
+          <PhoneShowcase />
+        </div>
+
+        <div className="relative hidden items-center justify-center overflow-hidden px-8 py-20 md:flex md:min-h-[100dvh]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.24),transparent_38%)]" />
-          <LaptopFrame />
+          <Reveal
+            variant="scale"
+            className="hidden w-full justify-center md:flex"
+          >
+            <LaptopFrame />
+          </Reveal>
         </div>
       </section>
 
-      <section id="mobile" className="relative bg-[#c2d8c4]">
+      <section id="mobile" className="relative hidden bg-[#c2d8c4] md:block">
         <div
           ref={mobileTrackRef}
           className="relative w-full"
