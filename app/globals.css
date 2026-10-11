@@ -213,3 +213,21 @@ body {
     transition: none;
   }
 }
+
+/* Rule that draws across once its Reveal parent is visible */
+.reveal-line {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+
+.reveal.is-visible .reveal-line {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-line {
+    transform: none;
+    transition: none;
+  }
+}

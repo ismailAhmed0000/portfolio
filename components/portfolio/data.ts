@@ -127,6 +127,42 @@ export type Project = {
 // Projects shown as tabs in the laptop browser. Add a new entry to add a tab.
 export const projects: readonly Project[] = [
   {
+    slug: "statepharma",
+    name: "StatePharma",
+    year: "2026",
+    status: "live",
+    tech: ["React", "Vite", "Laravel"],
+    summary:
+      "The public website of the State Pharmaceutical & Medical Supply Corporation of the Maldives — working towards equitable, uninterrupted access to essential medicine on every island. Alongside it, I work on StatePharma's internal ERP.",
+    highlights: [
+      "React + Vite frontend backed by a Laravel API",
+      "Work on StatePharma's internal ERP system",
+      "Entry point to the online prescription portal",
+      "News updates and procurement proposals",
+      "Adverse medicine reaction reporting via QR code",
+    ],
+    accent: "#34b37b",
+    links: [{ label: "Live", href: "https://statepharma.mv" }],
+  },
+  {
+    slug: "foodies",
+    name: "Foodies",
+    year: "2026",
+    status: "live",
+    tech: ["Laravel", "Next.js", "React"],
+    summary:
+      "A food delivery platform for the greater Malé region, connecting customers with over 100 restaurants, bakeries and home cooks. Built at Loopcraft, where I worked on it as a backend developer.",
+    highlights: [
+      "Laravel backend APIs as part of Loopcraft's core team",
+      "Integrated third-party APIs and external services",
+      "Ordering across 100+ vendors in a single app",
+      "Loyalty points and AI-powered recommendations",
+      "One-tap checkout with the Jeebu wallet",
+    ],
+    accent: "#f97316",
+    links: [{ label: "Live", href: "https://foodies.mv" }],
+  },
+  {
     slug: "gradle",
     name: "Gradle",
     year: "2026",
@@ -180,45 +216,6 @@ export const projects: readonly Project[] = [
         href: "https://github.com/ismailAhmed0000/SplitBuddy",
       },
     ],
-  },
-  {
-    slug: "score-predictor",
-    name: "World Cup Predictor",
-    year: "2026",
-    status: "personal",
-    tech: ["Go", "Fiber", "PostgreSQL", "React", "TypeScript", "Tailwind CSS"],
-    summary:
-      "A FIFA World Cup score prediction platform built for Loopcraft's office competition: users submit scores and top-scorer picks before kickoff, and admins manage fixtures, results and participants.",
-    highlights: [
-      "Spec-first Go (Fiber) API generated from an OpenAPI contract",
-      "Configurable scoring engine for exact score, outcome, top scorer and goal bonuses",
-      "Live leaderboard with detailed point breakdowns",
-      "PIN-based JWT login with role-based admin access",
-      "Admin dashboard with CSV export for standings and PINs",
-    ],
-    accent: "#f78c6c",
-    links: [
-      {
-        label: "GitHub",
-        href: "https://github.com/ismailAhmed0000/score-predictor",
-      },
-    ],
-  },
-  {
-    slug: "portfolio-v2",
-    name: "Portfolio v2",
-    year: "2026",
-    status: "live",
-    tech: ["Next.js", "TypeScript", "Tailwind CSS"],
-    summary:
-      "This portfolio — a laptop-and-browser showcase, an interactive iPhone, hanging staff cards, and a terminal-style contact section.",
-    highlights: [
-      "Interactive in-laptop browser with per-project tabs",
-      "iPhone home screen with tappable apps",
-      "Hand-built lanyard staff cards with CSS motion",
-    ],
-    accent: "#82aaff",
-    links: [{ label: "GitHub", href: githubProfileUrl }],
   },
 ];
 

@@ -6,6 +6,9 @@ import ExperienceSection from "@/components/portfolio/experience-section";
 import LandingHero from "@/components/portfolio/landing-hero";
 import LaptopFrame from "@/components/portfolio/laptop-frame";
 import Reveal from "@/components/portfolio/reveal";
+import SmoothScroll, {
+  scrollToElement,
+} from "@/components/portfolio/smooth-scroll";
 import MobileFrame from "@/components/portfolio/mobile-frame";
 import PhoneShowcase from "@/components/portfolio/phone-showcase";
 import { clamp } from "@/components/portfolio/utils";
@@ -41,7 +44,7 @@ export default function HomeExperience() {
     }
 
     scrollingRef.current = true;
-    element.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToElement(element);
 
     window.setTimeout(() => {
       scrollingRef.current = false;
@@ -94,6 +97,7 @@ export default function HomeExperience() {
 
   return (
     <main className="relative overflow-x-clip bg-[#c2d8c4] text-[#142019]">
+      <SmoothScroll />
       <div className="land-ambient pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.42),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(166,186,170,0.26),transparent_30%)]" />
 
       <LandingHero onOpenLaptop={() => smoothScrollTo(laptopRef.current)} />
