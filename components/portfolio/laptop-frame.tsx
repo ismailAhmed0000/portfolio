@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { projects, type Project } from "@/components/portfolio/data";
 import {
   formatTime,
@@ -9,131 +9,6 @@ import {
   StatusIcons,
   useCurrentMinute,
 } from "@/components/portfolio/phone-status";
-
-const FILES = ["overview.md", "preview.png", "links.json"] as const;
-type ProjectFile = (typeof FILES)[number];
-
-const FILE_ICON: Record<ProjectFile, string> = {
-  "overview.md": "M↓",
-  "preview.png": "▣",
-  "links.json": "{}",
-};
-
-const str = "text-[#c3e88d]";
-const prop = "text-[#89ddff]";
-const comment = "text-[#546e7a] italic";
-
-function OverviewFile({ project }: { project: Project }) {
-  return (
-    <div className="font-mono text-[0.74rem] leading-[1.7] text-[#cfd9d1] md:text-[0.82rem]">
-      <p className="text-[1.1em] font-bold text-[#f5fbf6]">
-        <span className="text-[#546e7a]"># </span>
-        {project.name}
-      </p>
-      <p className={`mt-1 ${comment}`}>
-        {project.year} · {project.status}
-      </p>
-
-      <p className="mt-3 max-w-[46rem] font-sans text-[1.05em] leading-[1.6] text-[#d5ddd7]">
-        {project.summary}
-      </p>
-
-      <p className="mt-4 font-bold text-[#f5fbf6]">
-        <span className="text-[#546e7a]">## </span>Highlights
-      </p>
-      <ul className="mt-1 space-y-0.5">
-        {project.highlights.map((item) => (
-          <li key={item}>
-            <span style={{ color: project.accent }}>- </span>
-            {item}
-          </li>
-        ))}
-      </ul>
-
-      <p className="mt-4 font-bold text-[#f5fbf6]">
-        <span className="text-[#546e7a]">## </span>Stack
-      </p>
-      <div className="mt-2 flex flex-wrap gap-1.5">
-        {project.tech.map((tech) => (
-          <span
-            key={tech}
-            className="rounded-md border border-white/8 bg-[#111418] px-2 py-0.5 text-[#a7b5aa]"
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function PreviewFile({ project }: { project: Project }) {
-  if (project.image) {
-    return (
-      <div className="relative h-full min-h-[8rem] w-full overflow-hidden rounded-lg border border-white/8">
-        <Image
-          src={project.image}
-          alt={`${project.name} preview`}
-          fill
-          className="object-cover object-top"
-          sizes="(min-width: 768px) 60rem, 90vw"
-        />
-      </div>
-    );
-  }
-
-  // Mock window until a real screenshot is added to the project data.
-  return (
-    <div className="flex h-full min-h-[8rem] items-center justify-center">
-      <div className="w-[min(100%,34rem)] overflow-hidden rounded-lg border border-white/8 bg-[#111418] shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-        <div className="flex items-center gap-1 border-b border-white/5 px-3 py-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
-        </div>
-        <div className="flex aspect-[16/8] flex-col items-center justify-center gap-2 p-4 text-center">
-          <span
-            className="text-[1.4rem] font-black tracking-[-0.04em] md:text-[2.4rem]"
-            style={{ color: project.accent }}
-          >
-            {project.name}
-          </span>
-          <span className="font-mono text-[0.55rem] text-[#546e7a] md:text-[0.72rem]">
-            screenshot coming soon
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function LinksFile({ project }: { project: Project }) {
-  return (
-    <div className="font-mono text-[0.74rem] leading-[1.8] break-all text-[#cfd9d1] md:break-normal md:text-[0.82rem]">
-      <p>{"{"}</p>
-      {project.links.length === 0 ? (
-        <p className={`pl-4 ${comment}`}>{"// links coming soon"}</p>
-      ) : (
-        project.links.map((link, index) => (
-          <p key={link.href + link.label} className="pl-4">
-            <span className={prop}>&quot;{link.label.toLowerCase()}&quot;</span>
-            <span>: </span>
-            <a
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${str} underline decoration-white/20 underline-offset-4 transition-colors hover:decoration-current`}
-            >
-              &quot;{link.href}&quot;
-            </a>
-            {index < project.links.length - 1 ? "," : null}
-          </p>
-        ))
-      )}
-      <p>{"}"}</p>
-    </div>
-  );
-}
 
 function Favicon({ project }: { project: Project }) {
   return (
@@ -461,163 +336,401 @@ export function PhoneBrowser() {
   );
 }
 
+function SafariIcon({ path }: { path: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d={path} />
+    </svg>
+  );
+}
+
+// Dev stack as a terminal session; lines type in one after another per project.
+function StackTerminal({
+  project,
+  onClose,
+}: {
+  project: Project;
+  onClose: () => void;
+}) {
+  const github = project.links.find((link) => link.label === "GitHub");
+  const lines: { text: string; tone: "prompt" | "out" | "ok" | "item" }[] = [
+    { text: `cd ~/projects/${project.slug}`, tone: "prompt" },
+    { text: "stack --list", tone: "prompt" },
+    ...project.tech.map((tech) => ({ text: tech, tone: "item" as const })),
+    { text: `✓ ${project.tech.length} technologies`, tone: "ok" },
+    ...(github
+      ? [
+          { text: "git remote get-url origin", tone: "prompt" as const },
+          { text: github.href.replace("https://", ""), tone: "out" as const },
+        ]
+      : []),
+  ];
+
+  return (
+    <div
+      className="flex h-full flex-col overflow-hidden rounded-xl bg-[#0f1412] shadow-[0_30px_80px_rgba(0,0,0,0.45),0_0_0_1px_rgba(0,0,0,0.25)]"
+      role="dialog"
+      aria-label={`Terminal — ${project.name} dev stack`}
+    >
+      <div className="flex items-center gap-1.5 border-b border-white/6 bg-[#1a201d] px-3.5 py-2.5">
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close terminal"
+          className="group flex h-2.5 w-2.5 items-center justify-center rounded-full bg-[#ff5f57] lg:h-3 lg:w-3"
+        >
+          <span className="text-[0.5rem] leading-none text-[#4d0000] opacity-0 transition-opacity group-hover:opacity-100">
+            ×
+          </span>
+        </button>
+        <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+        <span className="flex-1 pr-10 text-center font-mono text-[0.68rem] text-[#7f9183]">
+          zsh — {project.slug}
+        </span>
+      </div>
+
+      <div
+        key={project.slug}
+        className="min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap break-words px-4 py-3.5 font-mono text-[0.66rem] lg:text-[0.76rem] leading-[1.75] text-[#d6e4d7]"
+      >
+        {lines.map((line, index) => (
+          <p
+            key={`${index}-${line.text}`}
+            className="terminal-in"
+            style={{ animationDelay: `${index * 90}ms` }}
+          >
+            {line.tone === "prompt" ? (
+              <>
+                <span className="text-[#7fa188]">ismail@macbook</span>{" "}
+                <span className="text-[#5a7568]">%</span> {line.text}
+              </>
+            ) : null}
+            {line.tone === "item" ? (
+              <>
+                <span style={{ color: project.accent }}> ▸ </span>
+                {line.text}
+              </>
+            ) : null}
+            {line.tone === "ok" ? (
+              <span className="text-[#7dd97d]"> {line.text}</span>
+            ) : null}
+            {line.tone === "out" ? (
+              <span className="text-[#91a693]"> {line.text}</span>
+            ) : null}
+          </p>
+        ))}
+        <p
+          className="terminal-in"
+          style={{ animationDelay: `${lines.length * 90}ms` }}
+        >
+          <span className="text-[#7fa188]">ismail@macbook</span>{" "}
+          <span className="text-[#5a7568]">%</span>{" "}
+          <span className="terminal-cursor inline-block h-[1em] w-[0.55em] translate-y-[0.15em] bg-[#c2d8c4]" />
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// The page each Safari tab shows: overview, what it does and links, beside the stack terminal.
+function DesktopProjectPage({
+  project,
+  onOpenTerminal,
+}: {
+  project: Project;
+  onOpenTerminal: (event: MouseEvent<HTMLButtonElement>) => void;
+}) {
+  return (
+    <div className="grid h-full min-h-0 grid-cols-[1.1fr_1fr] gap-5 overflow-y-auto bg-white px-6 py-5 text-[#18231c] lg:gap-8 lg:px-10 lg:py-8 xl:gap-10 xl:px-12 xl:py-10">
+      <div className="page-in min-w-0">
+        <p className="flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[#7f9183]">
+          <span
+            className="h-2 w-2 rounded-full"
+            style={{ background: project.accent }}
+          />
+          {project.year} · {project.status}
+        </p>
+        <h3 className="mt-2 text-[clamp(1.8rem,2.6vw,2.6rem)] font-black leading-[1.02] tracking-[-0.035em]">
+          {project.name}
+        </h3>
+        <p className="mt-3 max-w-[34rem] text-[0.78rem] leading-[1.6] text-[#4b5f51] lg:text-[0.9rem]">
+          {project.summary}
+        </p>
+
+        <h4 className="mt-6 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-[#7f9183]">
+          What it does
+        </h4>
+        <ul className="mt-2.5 space-y-2">
+          {project.highlights.map((item) => (
+            <li
+              key={item}
+              className="flex gap-2.5 text-[0.74rem] leading-[1.5] text-[#24322a] lg:text-[0.84rem]"
+            >
+              <span
+                className="mt-[0.5rem] h-1.5 w-1.5 shrink-0 rounded-full"
+                style={{ background: project.accent }}
+              />
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        {project.links.length > 0 ? (
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            {project.links.map((link, index) => (
+              <a
+                key={link.href + link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group inline-flex items-center gap-2 rounded-full px-4 py-2 text-[0.8rem] font-semibold transition-[transform,background-color] duration-300 hover:-translate-y-0.5 ${
+                  index === 0
+                    ? "bg-[#18231c] text-white hover:bg-[#2f5139]"
+                    : "border border-[#d9e2db] text-[#18231c] hover:bg-[#eef3ef]"
+                }`}
+              >
+                {link.label}
+                <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                  ↗
+                </span>
+              </a>
+            ))}
+          </div>
+        ) : null}
+      </div>
+
+      <div className="page-in min-w-0 self-start [animation-delay:120ms]">
+        <div className="rounded-2xl border border-[#e3e8e4] bg-[#f6f8f6] p-5 lg:p-6">
+          <h4 className="text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-[#7f9183]">
+            Dev stack
+          </h4>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {project.tech.map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full bg-white px-2.5 py-1 font-mono text-[0.66rem] text-[#415348] ring-1 ring-[#e3e8e4] lg:text-[0.72rem]"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={onOpenTerminal}
+            className="group mt-5 flex w-full items-center justify-between rounded-xl bg-[#0f1412] px-4 py-3 text-left transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(15,20,18,0.25)]"
+          >
+            <span className="flex items-center gap-3">
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#1f2723] font-mono text-[0.7rem] font-bold text-[#7dd97d] ring-1 ring-white/10">
+                {">_"}
+              </span>
+              <span>
+                <span className="block text-[0.78rem] font-semibold text-white">
+                  Open in Terminal
+                </span>
+                <span className="block font-mono text-[0.62rem] text-[#7f9183]">
+                  stack --list
+                </span>
+              </span>
+            </span>
+            <span className="text-[#7f9183] transition-transform duration-300 group-hover:translate-x-0.5">
+              →
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function LaptopFrame() {
   const [activeSlug, setActiveSlug] = useState(projects[0]?.slug);
-  const [activeFile, setActiveFile] = useState<ProjectFile>("overview.md");
-
+  const [terminal, setTerminal] = useState<{
+    origin: string;
+    closing: boolean;
+  } | null>(null);
+  const screenRef = useRef<HTMLDivElement>(null);
   const project =
     projects.find((item) => item.slug === activeSlug) ?? projects[0];
+
+  // The window zooms out of (and back into) whatever opened it, like macOS.
+  const openTerminal = (event: MouseEvent<HTMLButtonElement>) => {
+    const screen = screenRef.current?.getBoundingClientRect();
+    const button = event.currentTarget.getBoundingClientRect();
+    const origin = screen
+      ? `${button.left + button.width / 2 - screen.left}px ${button.top + button.height / 2 - screen.top}px`
+      : "center";
+    setTerminal({ origin, closing: false });
+  };
+
+  const closeTerminal = () => {
+    setTerminal((current) => (current ? { ...current, closing: true } : null));
+  };
+
+  useEffect(() => {
+    if (!terminal || terminal.closing) {
+      return;
+    }
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setTerminal((current) =>
+          current ? { ...current, closing: true } : null,
+        );
+      }
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [terminal]);
 
   if (!project) {
     return null;
   }
 
-  const openProject = (slug: string) => {
-    setActiveSlug(slug);
-    setActiveFile("overview.md");
-  };
-
   return (
-    <>
-      <div className="relative hidden w-[88%] max-w-[73rem] md:block xl:w-full">
-        <div className="relative rounded-[1.1rem] bg-[linear-gradient(180deg,#1d1d1f_0%,#080809_100%)] p-[6px] shadow-[0_18px_60px_rgba(0,0,0,0.45)] md:rounded-[2rem] md:p-[10px] md:shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
-          <div className="absolute left-1/2 top-[2px] z-20 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-[#111] shadow-[0_0_0_1px_rgba(255,255,255,0.06)] md:top-[7px] md:h-[8px] md:w-[8px]" />
+    <div className="relative w-[88%] max-w-[73rem] xl:w-full">
+      <style>{`
+        @keyframes page-in {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: none; }
+        }
+        @keyframes terminal-in {
+          from { opacity: 0; transform: translateX(-6px); }
+          to   { opacity: 1; transform: none; }
+        }
+        @keyframes mac-window-in {
+          from { opacity: 0; transform: scale(0.06); }
+          60%  { opacity: 1; }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes mac-window-out {
+          from { opacity: 1; transform: scale(1); }
+          to   { opacity: 0; transform: scale(0.06); }
+        }
+        .mac-window-in { animation: mac-window-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+        .mac-window-out { animation: mac-window-out 0.32s cubic-bezier(0.55, 0, 0.75, 0.2) both; }
+        .page-in { animation: page-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        .terminal-in { animation: terminal-in 0.35s ease-out both; }
+        @media (prefers-reduced-motion: reduce) {
+          .page-in, .terminal-in, .mac-window-in, .mac-window-out { animation-duration: 1ms; }
+        }
+      `}</style>
 
-          <div className="overflow-hidden rounded-[0.8rem] border border-white/6 bg-[#111315] md:rounded-[1.55rem]">
-            <div className="aspect-[16/10] w-full bg-[#111315]">
-              <div className="flex h-full flex-col">
-                {/* ── browser tabs: one per project ── */}
-                <div
-                  className="flex items-end gap-1 overflow-x-auto bg-[#15181c] px-2 pt-2 [mask-image:linear-gradient(90deg,#000_85%,transparent)] [scrollbar-width:none] md:px-3 md:[mask-image:none]"
-                  role="tablist"
-                  aria-label="Projects"
+      <div className="relative rounded-[2rem] bg-[linear-gradient(180deg,#1d1d1f_0%,#080809_100%)] p-[10px] shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
+        <div className="absolute left-1/2 top-[7px] z-20 h-[8px] w-[8px] -translate-x-1/2 rounded-full bg-[#111] shadow-[0_0_0_1px_rgba(255,255,255,0.06)]" />
+
+        <div
+          ref={screenRef}
+          className="relative overflow-hidden rounded-[1.55rem] border border-white/6 bg-white"
+        >
+          <div className="flex aspect-[16/10] w-full flex-col">
+            {/* ── Safari toolbar ── */}
+            <div className="flex shrink-0 items-center gap-4 border-b border-[#e3e6e4] bg-[#f6f7f6] px-4 py-2.5 text-[#6b7a70]">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+                <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+                <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+              </div>
+              <div className="flex items-center gap-3">
+                <SafariIcon path="M2.5 3.5h11v9h-11zM6 3.5v9" />
+                <SafariIcon path="M10 3 5 8l5 5" />
+                <span className="opacity-40">
+                  <SafariIcon path="m6 3 5 5-5 5" />
+                </span>
+              </div>
+              <div className="mx-auto flex w-[min(30rem,48%)] items-center justify-center gap-1.5 rounded-lg bg-[#e9ecea] px-3 py-1.5 text-[0.74rem] text-[#18231c]">
+                <svg
+                  width="10"
+                  height="12"
+                  viewBox="0 0 10 12"
+                  fill="currentColor"
+                  className="opacity-50"
+                  aria-hidden
                 >
-                  <div className="mb-2 mr-2 flex shrink-0 items-center gap-1.5 self-center md:mr-3 md:gap-2">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-                  </div>
-                  {projects.map((item) => {
-                    const active = item.slug === project.slug;
-
-                    return (
-                      <button
-                        key={item.slug}
-                        type="button"
-                        role="tab"
-                        aria-selected={active}
-                        onClick={() => openProject(item.slug)}
-                        className={`flex shrink-0 items-center gap-2 rounded-t-[0.7rem] px-3 py-2 text-[0.7rem] transition-colors md:px-4 md:text-[0.74rem] ${
-                          active
-                            ? "bg-[#1e2228] text-[#eff6f0]"
-                            : "text-[#7e8a82] hover:bg-white/4 hover:text-[#c9d3cb]"
-                        }`}
-                      >
-                        <span
-                          className="h-1.5 w-1.5 rounded-full"
-                          style={{ background: item.accent }}
-                          aria-hidden
-                        />
-                        {item.name}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* ── address bar ── */}
-                <div className="flex items-center gap-2 border-b border-white/5 bg-[#1e2228] px-3 py-1.5 text-[0.66rem] md:px-4 md:py-2 md:text-[0.74rem]">
-                  <span className="text-[#546e7a]" aria-hidden>
-                    ‹ ›
-                  </span>
-                  <div className="flex-1 truncate rounded-full border border-white/8 bg-[#111418] px-3 py-1 font-mono text-[#a7b5aa]">
-                    <span className="text-[#546e7a]">ismailahmed.dev/</span>
-                    projects/{project.slug}/
-                    <span className="text-[#eff6f0]">{activeFile}</span>
-                  </div>
-                </div>
-
-                {/* ── page: file explorer + open file ── */}
-                <div className="flex min-h-0 flex-1 flex-col bg-[#1e2228] text-[#edf6ef] lg:grid lg:grid-cols-[0.24fr_1fr]">
-                  <aside className="hidden min-h-0 overflow-y-auto border-r border-white/6 bg-[#171a1f] p-4 lg:block">
-                    <p className="font-mono text-[0.5rem] uppercase tracking-[0.18em] text-[#7f9183] md:text-[0.68rem]">
-                      Explorer
-                    </p>
-                    <p className="mt-2 truncate font-mono text-[0.55rem] text-[#a7b5aa] md:mt-3 md:text-[0.76rem]">
-                      ⌄ {project.slug}
-                    </p>
-                    <div className="mt-1 space-y-0.5 md:space-y-1">
-                      {FILES.map((file) => {
-                        const active = file === activeFile;
-
-                        return (
-                          <button
-                            key={file}
-                            type="button"
-                            onClick={() => setActiveFile(file)}
-                            className={`flex w-full items-center gap-1.5 rounded-md border px-1.5 py-1 text-left font-mono text-[0.55rem] transition-colors md:gap-2 md:px-2 md:py-1.5 md:text-[0.76rem] ${
-                              active
-                                ? "border-[#7dd97d]/20 bg-[#0f1114] text-[#7dd97d]"
-                                : "border-transparent text-[#a7b5aa] hover:bg-white/4 hover:text-[#eff6f0]"
-                            }`}
-                          >
-                            <span className="w-4 shrink-0 text-center text-[0.85em] text-[#546e7a]">
-                              {FILE_ICON[file]}
-                            </span>
-                            <span className="truncate">{file}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </aside>
-
-                  {/* file tabs replace the explorer below lg */}
-                  <div className="flex shrink-0 gap-1 overflow-x-auto border-b border-white/6 bg-[#171a1f] px-2 py-1.5 lg:hidden">
-                    {FILES.map((file) => (
-                      <button
-                        key={file}
-                        type="button"
-                        onClick={() => setActiveFile(file)}
-                        className={`flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 font-mono text-[0.7rem] transition-colors ${
-                          file === activeFile
-                            ? "bg-[#0f1114] text-[#7dd97d]"
-                            : "text-[#a7b5aa]"
-                        }`}
-                      >
-                        <span className="text-[#546e7a]">
-                          {FILE_ICON[file]}
-                        </span>
-                        {file}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div
-                    key={`${project.slug}/${activeFile}`}
-                    className="min-h-0 flex-1 overflow-y-auto p-4 md:p-7"
-                    role="tabpanel"
-                  >
-                    {activeFile === "overview.md" ? (
-                      <OverviewFile project={project} />
-                    ) : null}
-                    {activeFile === "preview.png" ? (
-                      <PreviewFile project={project} />
-                    ) : null}
-                    {activeFile === "links.json" ? (
-                      <LinksFile project={project} />
-                    ) : null}
-                  </div>
-                </div>
+                  <path d="M2 5V3.5a3 3 0 0 1 6 0V5h.5A1.5 1.5 0 0 1 10 6.5v4A1.5 1.5 0 0 1 8.5 12h-7A1.5 1.5 0 0 1 0 10.5v-4A1.5 1.5 0 0 1 1.5 5H2zm1.5 0h3V3.5a1.5 1.5 0 0 0-3 0V5z" />
+                </svg>
+                <span className="truncate">
+                  ismailahmed.dev/projects/{project.slug}
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <SafariIcon path="M8 2v8M5 5l3-3 3 3M3.5 8.5v4h9v-4" />
+                <SafariIcon path="M8 3v10M3 8h10" />
+                <SafariIcon path="M4.5 2.5h9v9M2.5 4.5h9v9h-9z" />
               </div>
             </div>
+
+            {/* ── tab bar: one tab per project ── */}
+            <div
+              className="flex shrink-0 gap-px border-b border-[#e3e6e4] bg-[#eceeed] px-2 pt-1.5"
+              role="tablist"
+              aria-label="Projects"
+            >
+              {projects.map((item) => {
+                const active = item.slug === project.slug;
+
+                return (
+                  <button
+                    key={item.slug}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setActiveSlug(item.slug)}
+                    className={`flex min-w-0 flex-1 items-center justify-center gap-2 rounded-t-lg px-3 py-1.5 text-[0.74rem] transition-colors duration-200 ${
+                      active
+                        ? "bg-white font-medium text-[#18231c] shadow-[0_-1px_0_rgba(0,0,0,0.04)]"
+                        : "text-[#6b7a70] hover:bg-white/60 hover:text-[#18231c]"
+                    }`}
+                  >
+                    <Favicon project={item} />
+                    <span className="truncate">{item.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div key={project.slug} className="min-h-0 flex-1" role="tabpanel">
+              <DesktopProjectPage
+                project={project}
+                onOpenTerminal={openTerminal}
+              />
+            </div>
           </div>
+
+          {terminal ? (
+            <div
+              className={`pointer-events-none absolute inset-0 z-30 ${terminal.closing ? "mac-window-out" : "mac-window-in"}`}
+              style={{ transformOrigin: terminal.origin }}
+              onAnimationEnd={(event) => {
+                if (event.animationName === "mac-window-out") {
+                  setTerminal(null);
+                }
+              }}
+            >
+              <div className="pointer-events-auto absolute right-[5%] top-[17%] h-[70%] w-[52%]">
+                <StackTerminal project={project} onClose={closeTerminal} />
+              </div>
+            </div>
+          ) : null}
         </div>
-
-        <div className="mx-auto -mt-[2px] h-[14px] md:-mt-[4px] md:h-[30px] w-[112%] -translate-x-[5.36%] rounded-b-[2rem] bg-[linear-gradient(180deg,#323236_0%,#1a1a1d_45%,#050506_100%)] shadow-[0_24px_36px_rgba(0,0,0,0.5)]" />
-        <div className="mx-auto -mt-[12px] h-[10px] w-[27%] rounded-b-[999px] bg-[linear-gradient(180deg,#454549_0%,#232326_100%)] md:-mt-[25px] md:h-[24px]" />
-
-        <div className="pointer-events-none absolute bottom-0 left-[4%] h-[4px] md:h-[7px] w-[10%] rounded-full bg-[#0f0f10]" />
-        <div className="pointer-events-none absolute bottom-0 right-[4%] h-[4px] md:h-[7px] w-[10%] rounded-full bg-[#0f0f10]" />
       </div>
-    </>
+
+      <div className="mx-auto -mt-[4px] h-[30px] w-[112%] -translate-x-[5.36%] rounded-b-[2rem] bg-[linear-gradient(180deg,#323236_0%,#1a1a1d_45%,#050506_100%)] shadow-[0_24px_36px_rgba(0,0,0,0.5)]" />
+      <div className="mx-auto -mt-[25px] h-[24px] w-[27%] rounded-b-[999px] bg-[linear-gradient(180deg,#454549_0%,#232326_100%)]" />
+
+      <div className="pointer-events-none absolute bottom-0 left-[4%] h-[7px] w-[10%] rounded-full bg-[#0f0f10]" />
+      <div className="pointer-events-none absolute bottom-0 right-[4%] h-[7px] w-[10%] rounded-full bg-[#0f0f10]" />
+    </div>
   );
 }

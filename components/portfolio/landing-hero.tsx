@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { scrollToElement } from "@/components/portfolio/smooth-scroll";
 
 type LandingHeroProps = {
   onOpenLaptop: () => void;
@@ -38,9 +39,7 @@ type NavItem = {
 };
 
 function scrollToId(id: string) {
-  document
-    .getElementById(id)
-    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollToElement(document.getElementById(id));
 }
 
 export default function LandingHero({ onOpenLaptop }: LandingHeroProps) {

@@ -175,7 +175,7 @@ function StaffBadge({ job }: { job: Job }) {
       <LobsterClip />
 
       {/* badge */}
-      <article className="relative -mt-3 w-[min(70vw,224px)] rounded-[11px] bg-[#1e2b23] px-4 pb-4 pt-3 text-[#e3ece4] shadow-[0_28px_60px_rgba(24,35,28,0.35),inset_0_1px_0_rgba(255,255,255,0.06)]">
+      <article className="relative -mt-3 w-[min(70vw,224px)] rounded-[11px] bg-[#1e2b23] px-4 pb-4 pt-3 text-[#e3ece4] shadow-[0_28px_60px_rgba(24,35,28,0.35),inset_0_1px_0_rgba(255,255,255,0.06)] transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1.5 group-hover:shadow-[0_40px_80px_rgba(24,35,28,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]">
         <div
           className="mx-auto h-[8px] w-[34px] rounded-full bg-[#c2d8c4] shadow-[inset_0_2px_3px_rgba(0,0,0,0.35)]"
           aria-hidden
@@ -217,6 +217,10 @@ function StaffBadge({ job }: { job: Job }) {
 // On phones, current and past roles each get a swipeable carousel.
 const CURRENT_JOBS = JOBS.filter((job) => job.period.includes("Present"));
 const PAST_JOBS = JOBS.filter((job) => !job.period.includes("Present"));
+const JOB_GROUPS = [
+  { label: "Currently", jobs: CURRENT_JOBS },
+  { label: "Previously", jobs: PAST_JOBS },
+].filter((group) => group.jobs.length > 0);
 
 function JobDetails({ job }: { job: Job }) {
   return (
@@ -224,7 +228,7 @@ function JobDetails({ job }: { job: Job }) {
       <p className="mt-10 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-[#5a7568]">
         {job.period}
       </p>
-      <h3 className="mt-1.5 text-[1.1rem] font-bold tracking-[-0.02em] text-[#18231c]">
+      <h3 className="mt-1.5 text-[1.1rem] font-bold tracking-[-0.02em] text-[#18231c] transition-colors duration-300 group-hover:text-[#2f5139]">
         {job.heading}
       </h3>
       <p className="mt-2.5 max-w-[26rem] text-[0.9rem] leading-[1.6] text-[#5a7568]">
@@ -269,8 +273,20 @@ export default function ExperienceSection() {
           from { transform: rotate(calc(var(--tilt) - 1.2deg)); }
           to   { transform: rotate(calc(var(--tilt) + 1.2deg)); }
         }
+        /* hovering a role nudges its badge on the lanyard */
+        .job-card:hover .badge-sway {
+          animation: badge-nudge 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        @keyframes badge-nudge {
+          0%   { transform: rotate(var(--tilt)); }
+          25%  { transform: rotate(calc(var(--tilt) + 5deg)); }
+          50%  { transform: rotate(calc(var(--tilt) - 3deg)); }
+          75%  { transform: rotate(calc(var(--tilt) + 1.2deg)); }
+          100% { transform: rotate(calc(var(--tilt) + 0deg)); }
+        }
         @media (prefers-reduced-motion: reduce) {
-          .badge-sway { animation: none; }
+          .badge-sway,
+          .job-card:hover .badge-sway { animation: none; }
         }
       `}</style>
 
@@ -304,20 +320,37 @@ export default function ExperienceSection() {
           ) : null}
         </div>
 
-        {/* tablet and up: all roles side by side */}
-        <div className="mt-2 hidden gap-y-16 md:grid md:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-[#5a7568]/20">
-          {JOBS.map((job, index) => (
-            <Reveal
-              key={job.code}
-              delay={index * 120}
-              variant="scale"
-              className="flex flex-col md:px-6 lg:px-5 lg:first:pl-0 lg:last:pr-0"
-            >
-              <div className="flex justify-center">
-                <StaffBadge job={job} />
+        {/* tablet and up: current roles, then past roles below */}
+        <div className="mt-8 hidden gap-20 md:grid">
+          {JOB_GROUPS.map((group) => (
+            <div key={group.label}>
+              <Reveal>
+                <div className="flex items-baseline justify-between font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[#5a7568]">
+                  <span>{group.label}</span>
+                  <span>{String(group.jobs.length).padStart(2, "0")}</span>
+                </div>
+                <span
+                  className="reveal-line mt-3 block h-px w-full bg-[#5a7568]/35"
+                  aria-hidden
+                />
+              </Reveal>
+
+              <div className="mt-4 grid grid-cols-2 gap-8">
+                {group.jobs.map((job, index) => (
+                  <Reveal
+                    key={job.code}
+                    delay={index * 140}
+                    variant="scale"
+                    className="job-card group flex flex-col"
+                  >
+                    <div className="flex justify-center">
+                      <StaffBadge job={job} />
+                    </div>
+                    <JobDetails job={job} />
+                  </Reveal>
+                ))}
               </div>
-              <JobDetails job={job} />
-            </Reveal>
+            </div>
           ))}
         </div>
       </div>
