@@ -243,7 +243,6 @@ function JobsCarousel({ jobs }: { jobs: Job[] }) {
     <SwipeCarousel
       slides={jobs.map((job) => ({
         id: job.code,
-        label: job.company,
         content: (
           <>
             <div className="flex justify-center">

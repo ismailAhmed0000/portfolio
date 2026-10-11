@@ -133,16 +133,19 @@ export const projects: readonly Project[] = [
     status: "live",
     tech: ["React", "Vite", "Laravel"],
     summary:
-      "The public website of the State Pharmaceutical & Medical Supply Corporation of the Maldives — working towards equitable, uninterrupted access to essential medicine on every island. Alongside it, I work on StatePharma's internal ERP.",
+      "The public website of the State Pharmaceutical & Medical Supply Corporation of the Maldives — working towards equitable, uninterrupted access to essential medicine on every island. I also worked on its online prescription portal and StatePharma's internal ERP.",
     highlights: [
       "React + Vite frontend backed by a Laravel API",
       "Work on StatePharma's internal ERP system",
-      "Entry point to the online prescription portal",
+      "Worked on the online prescription portal, where citizens submit prescriptions for collection or delivery",
       "News updates and procurement proposals",
       "Adverse medicine reaction reporting via QR code",
     ],
     accent: "#34b37b",
-    links: [{ label: "Live", href: "https://statepharma.mv" }],
+    links: [
+      { label: "Live", href: "https://statepharma.mv" },
+      { label: "Portal", href: "https://portal.statepharma.mv" },
+    ],
   },
   {
     slug: "foodies",

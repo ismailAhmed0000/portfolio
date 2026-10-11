@@ -110,8 +110,18 @@ export default function HomeExperience() {
           <PhoneShowcase />
         </div>
 
-        <div className="relative hidden items-center justify-center overflow-hidden px-8 py-20 md:flex md:min-h-[100dvh]">
+        <div className="relative hidden flex-col items-center justify-center overflow-hidden px-8 py-20 md:flex md:min-h-[100dvh]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.24),transparent_38%)]" />
+          <Reveal className="relative mb-12 flex w-full max-w-[72rem] items-end justify-between gap-6">
+            <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-black leading-none tracking-[-0.04em] text-[#18231c]">
+              Projects
+            </h2>
+            <p className="text-right font-mono text-[0.65rem] uppercase leading-[1.7] tracking-[0.1em] text-[#5a7568]">
+              Things I&rsquo;ve built.
+              <br />
+              Pick a tab to explore.
+            </p>
+          </Reveal>
           <Reveal
             variant="scale"
             className="hidden w-full justify-center md:flex"
