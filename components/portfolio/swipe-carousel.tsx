@@ -4,7 +4,6 @@ import { useRef, useState, type ReactNode } from "react";
 
 export type CarouselSlide = {
   id: string;
-  label: string;
   content: ReactNode;
 };
 
@@ -16,8 +15,7 @@ type SwipeCarouselProps = {
 
 const GAP_PX = 16;
 
-// Horizontal snap carousel with a pill switcher; the slide in focus is full size,
-// the others shrink and fade. Swiping and tapping a pill stay in sync.
+// Horizontal snap carousel; the slide in focus is full size, the others shrink and fade.
 export default function SwipeCarousel({
   slides,
   slideWidth = "w-[78%]",
@@ -35,15 +33,6 @@ export default function SwipeCarousel({
 
     const step = first.offsetWidth + GAP_PX;
     setActive(Math.min(slides.length - 1, Math.round(track.scrollLeft / step)));
-  };
-
-  const goTo = (index: number) => {
-    const slide = trackRef.current?.children[index] as HTMLElement | undefined;
-    slide?.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest",
-    });
   };
 
   return (
@@ -64,25 +53,6 @@ export default function SwipeCarousel({
           >
             {slide.content}
           </div>
-        ))}
-      </div>
-
-      <div className="mt-6 flex items-center justify-center gap-2">
-        {slides.map((slide, index) => (
-          <button
-            key={slide.id}
-            type="button"
-            onClick={() => goTo(index)}
-            aria-label={`Show ${slide.label}`}
-            aria-current={index === active}
-            className={`flex h-8 items-center rounded-full px-3 font-mono text-[0.62rem] uppercase tracking-[0.12em] transition-all duration-500 ${
-              index === active
-                ? "bg-[#18231c] text-[#eef5ef]"
-                : "bg-[#18231c]/8 text-[#5a7568]"
-            }`}
-          >
-            {slide.label}
-          </button>
         ))}
       </div>
     </div>
